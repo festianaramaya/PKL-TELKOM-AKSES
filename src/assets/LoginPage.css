@@ -1,0 +1,135 @@
+/* Container pembungkus Full Screen */
+.login-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: #ffffff;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Gambar Peta memenuhi seluruh layar */
+.bg-map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: multiply;
+  z-index: 1;
+}
+
+/* === HEADER KIRI === */
+.header-left {
+  position: absolute;
+  top: 26px; /* Jarak dari atas layar, sesuaikan agar lurus dengan Telkom Akses */
+  left: 62px; /* Jarak dari kiri layar */
+  z-index: 2;
+  display: flex;
+  align-items: center; /* Memastikan isi di dalamnya rata tengah secara vertikal */
+}
+
+/* Logo VALORA Utuh (Diperkecil agar proporsional dengan desain) */
+.logo-valora-full {
+  height: 70px; /* Tinggi ini disesuaikan dengan tinggi asli ikon pada desain Figma awal */
+  width: auto; 
+  object-fit: contain;
+  object-position: left;
+}
+
+/* === HEADER KANAN === */
+.header-right {
+  position: absolute;
+  top: -7px; /* Ini posisi dari desain sebelumnya, kita biarkan saja jika sudah pas */
+  right: 60px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  height: 114px; /* Menyamakan tinggi container dengan tinggi gambar agar center bisa sejajar */
+}
+
+.logo-ta {
+  width: auto;
+  height: 80px;
+  object-fit: cover;
+}
+
+/* === KOTAK LOGIN PERSIS UKURAN FIGMA === */
+.login-card {
+  position: relative;
+  z-index: 2;
+  width: 332px;  
+  height: 283px; 
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 40px;
+  box-shadow: 0px 4px 35px 0px rgba(0, 0, 0, 0.08);
+  padding: 23px 57px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-title {
+  color: #000000;
+  font-family: "Poppins-Medium", sans-serif;
+  font-size: 40px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  line-height: 1;
+}
+
+.input-group {
+  width: 198px; 
+  margin-bottom: 12px;
+}
+
+.input-group label {
+  color: #000000;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.input-group input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #000000; 
+  background: transparent;
+  color: #000000;
+  font-family: "Poppins-Light", sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 4px 0;
+  outline: none;
+}
+
+.input-group input::placeholder {
+  color: #808080;
+}
+
+.login-btn {
+  margin-top: 15px;
+  width: 206px;
+  height: 27px;
+  background: #808080;
+  border-radius: 10px;
+  box-shadow: 0px 4px 19px 0px rgba(119, 147, 65, 0.3);
+  border: none;
+  color: #ffffff;
+  font-family: "Poppins-Medium", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Transisi diubah ke background-color agar perpindahan warnanya halus */
+}
+
+.login-btn:hover {
+  background-color: #ED1E28; /* Efek hover diubah ke warna merah */
+}

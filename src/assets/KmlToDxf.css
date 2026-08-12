@@ -1,0 +1,39 @@
+/* Gaya dasar untuk kotak upload agar sama persis dengan menu lain */
+.upload-zone-dxf {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  padding: 32px;
+  min-height: 160px;
+  border: 1.5px dashed #cbd5e1;[cite: 10]
+  border-radius: 6px;[cite: 10]
+  box-sizing: border-box;[cite: 10]
+  transition: all 0.2s ease;[cite: 10]
+  
+  /* KUNCI: Jadikan putih semi-transparan dengan efek blur tipis */
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  
+}
+
+/* Efek saat kursor diarahkan (Hover) -> Berubah Biru semi-transparan */
+.upload-zone-dxf:hover {
+  border-color: #3175f2;[cite: 10]
+  background-color: rgba(239, 246, 255, 0.7) !important;
+}
+
+/* Warna ikon awan ikut berubah biru saat di-hover */
+.upload-zone-dxf:hover .icon-dxf {
+  color: #3175f2;[cite: 10]
+  transition: color 0.2s ease;[cite: 10]
+}
+
+/* State setelah file terpilih -> Berubah Hijau semi-transparan */
+.upload-zone-dxf.has-file {
+  border-color: #10b981;[cite: 10]
+  border-style: solid;[cite: 10]
+  background-color: rgba(240, 253, 244, 0.7) !important;
+}

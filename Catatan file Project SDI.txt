@@ -1,0 +1,30 @@
+Catatan file Project SDI
+
+## 🛠️ Tech Stack Utama
+*   **Frontend:** React (dibangun dengan Vite) + TypeScript.
+*   **Backend:** Node.js (Express) via `server.ts`.
+*   **Database:** SQLite (`infralink.db`).
+
+*/src/assets---> file css setiap fitur 
+*/src/components--->
+digunakan untuk menyimpan elemen-elemen antarmuka (UI) yang bisa digunakan berulang kali di berbagai halaman, atau untuk komponen pembungkus (wrapper) yang mengatur tata letak dan keamanan.meliputi
+*MainLayout.tsx
+Fungsi: Sebagai kerangka tata letak (Layout) utama aplikasi.
+File ini biasanya bertugas menyatukan komponen-komponen statis seperti menu navigasi samping (Sidebar) dan bilah atas (Header/Navbar). Halaman-halaman fitur (seperti LineToPoint atau CreateLop) nantinya akan dirender/dimasukkan ke dalam bagian tengah kerangka MainLayout ini.
+
+*ProtectedRoute.tsx
+Fungsi: Penjaga pintu masuk aplikasi (Authentication Wrapper).
+File ini berisi logika keamanan untuk memastikan bahwa hanya pengguna yang sudah login yang bisa mengakses halaman tertentu. Jika ada pengunjung anonim mencoba membuka URL halaman fitur secara langsung, komponen ini akan memblokirnya dan melempar (redirect) pengunjung tersebut kembali ke halaman Login.
+
+*AdminRoute.tsx
+Fungsi: Penjaga pintu khusus hak akses tinggi (Authorization Wrapper).
+Mirip dengan ProtectedRoute, namun lebih spesifik. Komponen ini memastikan bahwa halaman-halaman sensitif (misalnya halaman pengaturan sistem, kelola user, atau lihat riwayat database) hanya bisa dibuka oleh pengguna yang memiliki status/level Admin.
+
+*/src/pages--->file untuk setiap frontend(ui/ux) dari setiap fitur
+*/telkom-kml-tools/src/App.tsx--->
+berisi pengaturan rute/URL (Routing). Di sinilah Anda mengatur fitur bahwa URL /line-to-point akan membuka halaman Line To Point, /create-lop membuka halaman Create LOP, dan mengatur agar semua halaman tersebut dibungkus oleh komponen MainLayout.tsx.
+
+telkom-kml-tools/server.ts---> program backend menjalankan server perintah 'npn run dev'
+/telkom-kml-tools/public/image &/welcome----> menyimpan elemen foto,logo, simbol dll untuk di tambahkan di website
+
+

@@ -1,0 +1,6 @@
+{
+  "name": "Telkom KML Tools",
+  "description": "Professional tool for SDI and Telkom surveyors to convert KML files to DXF (AutoCAD) and CSV formats with OSM integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

@@ -1,0 +1,167 @@
+
+/* Wadah Kartu Utama */
+.card {
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+/* Input & Form (Membuatnya full width & bergaris rapi) */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #334155;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    box-sizing: border-box; /* Mencegah input melebihi lebar layar */
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color, #231B4D);
+    box-shadow: 0 0 0 3px rgba(35, 27, 77, 0.1);
+}
+
+/* Area Upload Drag & Drop */
+.file-upload-area {
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 6px;
+  background-color: #f8fafc;
+  padding: 32px;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+.file-upload-area:hover,
+.file-upload-area.dragover {
+  border-color: #3175f2;
+  background-color: #eff6ff;
+}
+.file-upload-area.has-file {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+  border-style: solid;
+}
+
+
+.file-upload-icon {
+    margin-bottom: 16px;
+    color: var(--primary-color, #231B4D);
+    display: flex;
+    justify-content: center;
+}
+
+.file-name {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #64748B;
+}
+
+/* Bagian Judul Pilihan Ikon */
+.section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-color, #231B4D);
+}
+
+/* Grid Pilihan Ikon */
+.icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 12px;
+}
+
+.icon-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    border: 2px solid #E2E8F0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #FFFFFF;
+}
+
+.icon-option:hover {
+    border-color: #CBD5E1;
+    transform: translateY(-2px);
+}
+
+.icon-option.selected {
+    border-color: var(--primary-color, #231B4D);
+    background-color: rgba(35, 27, 77, 0.05);
+}
+
+.icon-image {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    margin-bottom: 8px;
+}
+
+.icon-option span {
+    font-size: 0.85rem;
+    color: #334155;
+}
+
+/* Tombol Full Width di bawah (Generate & Download) */
+.button-separator {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #E2E8F0;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    background-color: var(--primary-color, #3175f2);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.btn-block:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}

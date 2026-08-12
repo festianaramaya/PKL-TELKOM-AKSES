@@ -1,0 +1,317 @@
+/* --- src/assets/css/CreateLop.css --- */
+.create-lop-wrapper {
+  /* KUNCI: Jadikan transparan agar menyatu dengan peta */
+  background: transparent !important; 
+  box-shadow: none !important;
+  
+  border-radius: 8px;
+  padding-bottom: 24px;
+}
+
+/* Header Biru Melengkung */
+.lop-header-banner {
+  background: linear-gradient(90deg, #0f2e5a 0%, #174276 100%);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.lop-form-container {
+  padding: 24px 24px 0 24px;
+}
+
+/* Tata Letak Utama Kolom ODP & BOQ */
+.lop-top-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+/* Baris ganda: Data ODP + CSV Referensi berdampingan */
+.lop-dual-upload-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.lop-odp-col {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.lop-boq-col {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Pengaturan Teks Label */
+.lop-form-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+.lop-form-label span { color: #ED1E28; }
+.lop-help-text { font-size: 11px; color: #64748b; margin-top: 8px; }
+
+/* Kotak keterangan format Data ODP */
+.lop-help-box {
+  border: 1.5px dashed #93c5fd;
+  
+  /* Jadikan biru semi-transparan */
+  background-color: rgba(239, 246, 255, 0.4) !important;
+
+  
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #1e293b;
+}
+.lop-help-box .lop-help-label {
+  color: #3175f2;
+  font-weight: 600;
+}
+.lop-help-box strong {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+/* Upload Zone Global */
+/* Upload Zone Global */
+.lop-upload-zone {
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 6px;
+  
+  /* Jadikan putih semi-transparan dengan efek blur tipis */
+  background-color: rgba(255, 255, 255, 0.4) !important;
+ 
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.lop-upload-zone:hover { 
+  border-color: #3b82f6; 
+  background-color: rgba(239, 246, 255, 0.7) !important; 
+}
+
+.lop-upload-zone.has-file { 
+  border-color: #10b981; 
+  background-color: rgba(240, 253, 244, 0.7) !important; 
+  border-style: solid; 
+}
+
+
+/* Upload Zone: ODP (Besar) */
+.large-zone {
+  flex: 0 0 180px;
+  height: 180px;
+  padding: 24px;
+}
+.large-zone .lop-upload-title { font-size: 14px; font-weight: 500; color: #1e293b; margin-top: 12px; }
+.large-zone .lop-upload-subtitle { font-size: 12px; color: #3b82f6; margin-top: 4px; }
+
+/* Upload Zone: BOQ Grid (5 Kolom sejajar dalam satu baris) */
+.boq-grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.small-zone {
+  padding: 16px 8px;
+  min-height: 110px;
+}
+.small-zone .lop-upload-title { font-size: 12px; font-weight: 500; color: #1e293b; margin-top: 8px; }
+.small-zone .lop-upload-subtitle { 
+  font-size: 11px; 
+  color: #3b82f6; 
+  margin-top: 4px; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+  width: 100%;
+  padding: 0 4px;
+}
+
+/* Input Row (Baris 2) */
+.lop-input-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.lop-form-col { flex: 1; }
+
+.lop-input-text {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #334155;
+  box-sizing: border-box;
+}
+.lop-input-text:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+
+/* Baris Ikon Penanda */
+.lop-section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 12px;
+}
+
+/* =========================================
+   STYLING UNTUK PILIHAN IKON PENANDA (DISAMAKAN)
+   ========================================= */
+
+/* Menggunakan CSS Grid agar ukuran dan jarak sejajar dengan modul lain */
+.lop-icon-flex {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+/* Kotak Ikon Default */
+/* Kotak Ikon Default */
+.lop-icon-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 12px 8px;
+  border: 2px solid #E2E8F0; 
+  border-radius: 8px; 
+  cursor: pointer;
+  height: 105px; 
+  text-align: center;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  
+  /* Jadikan putih semi-transparan */
+  background-color: rgba(255, 255, 255, 0.4) !important;
+ 
+}
+
+.lop-icon-option:hover {
+  background-color: rgba(248, 250, 252, 0.8) !important;
+  transform: translateY(-2px);
+}
+
+/* Kondisi saat kotak dipilih (Selected) -> Warna Merah */
+.lop-icon-option.selected {
+  border-color: #ed1e28 !important; 
+  background-color: rgba(254, 242, 242, 0.8) !important; 
+}
+
+/* Gambar Ikon */
+.lop-icon-image { 
+  width: 36px; /* Ukuran disamakan */
+  height: 36px; 
+  object-fit: contain; 
+  margin-bottom: 10px; 
+}
+
+/* Label Teks di bawah Ikon */
+.lop-icon-name { 
+  display: block;
+  width: 100%;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  color: #475569;
+  font-weight: 500;
+  text-align: center;
+  white-space: normal;
+}
+/* Tombol Submit Biru */
+.lop-btn-submit {
+  width: 100%;
+  padding: 14px;
+  background-image: none !important;
+  background-color: #4d535e !important;
+  background: #4d535e !important;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.lop-btn-submit:hover:not(:disabled) { background: #4d535e !important; }
+.lop-btn-submit:disabled { background: #94a3b8 !important; cursor: not-allowed; }
+
+/* Tombol Submit: state loading dengan spinner */
+.lop-btn-loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.lop-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  display: inline-block;
+  animation: lop-spin 0.7s linear infinite;
+}
+@keyframes lop-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Notifikasi hasil proses (sukses / gagal) */
+.lop-alert {
+  margin: 16px 24px 0 24px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+.lop-alert-success {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+.lop-alert-error {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 1024px) {
+  .boq-grid-container { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .lop-input-row { flex-direction: column; gap: 16px; }
+  .lop-dual-upload-row { flex-direction: column; gap: 16px; }
+  .boq-grid-container { grid-template-columns: repeat(2, 1fr); }
+}

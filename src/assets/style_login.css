@@ -1,0 +1,310 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.login,
+.login * {
+  box-sizing: border-box;
+}
+
+.login {
+  background: #ffffff;
+  width: 100vw;       /* Berubah dari 1366px agar mengikuti 100% lebar layar laptop */
+  min-height: 100vh;  /* Berubah dari 581px agar mengikuti 100% tinggi layar laptop */
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.group-61 {
+  position: absolute;
+  inset: 0;
+}
+
+.loginpage-bg-image {
+  width: 100%;
+  height: 50vh; /* Tingginya disesuaikan menjadi 50% layar */
+  position: absolute;
+  left: 0;
+  bottom: 0;    /* Gambar ditempel ke bawah layar */
+  top: auto;    /* Menghapus pengaturan top: 318px bawaan Figma */
+  mix-blend-mode: multiply;
+  object-fit: cover;
+}
+
+.loginpage-bg-interior-image {
+  width: 100%;
+  height: 60vh; /* Tingginya disesuaikan menjadi 60% layar */
+  position: absolute;
+  left: 0;
+  top: 0;
+  object-fit: cover;
+}
+
+.loginpage-card-bg {
+  background: #ffffff;
+  border-radius: 40px;
+  width: 762.68px;
+  height: 357.98px;
+  position: absolute;
+  left: 437.84px;
+  top: 107.39px;
+  box-shadow: 0px 4px 35px 0px rgba(0, 0, 0, 0.08);
+}
+
+.loginpage-card-brand-label {
+  text-align: left;
+  font-family: "Gugi", cursive, sans-serif;
+  font-size: 21px;
+  font-weight: 400;
+  position: absolute;
+  left: 494.7px;
+  top: 140.29px;
+  width: 337.22px;
+  height: 19.35px;
+}
+
+.loginpage-card-brand-label-span {
+  color: #3333f4;
+}
+
+.loginpage-card-brand-label-span2 {
+  color: #ed1e28;
+}
+
+.loginpage-signup-link {
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  position: absolute;
+  left: 490.78px;
+  top: 446px;
+  width: 638.16px;
+  height: 9.66px;
+}
+
+.loginpage-signup-link-span {
+  color: #8d8d8d;
+}
+
+.loginpage-signup-link-span2 {
+  color: #0089ed;
+}
+
+.loginpage-title {
+  color: #000000;
+  text-align: left;
+  font-family: "Poppins", sans-serif;
+  font-size: 48px;
+  font-weight: 500;
+  position: absolute;
+  left: 494.7px;
+  top: 159.64px;
+  width: 218.61px;
+  height: 74.5px;
+}
+
+.loginpage-form {
+  width: 638.16px;
+  position: absolute;
+  left: 494.7px;
+  top: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.loginpage-username-group,
+.loginpage-password-group {
+  position: relative;
+  width: 100%;
+  height: 66px;
+}
+
+.loginpage-input-label {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 20px;
+}
+
+.loginpage-input-box {
+  background: #ffffff;
+  border-radius: 9px;
+  border-style: solid;
+  border-color: #4285f4;
+  border-width: 1px;
+  width: 100%;
+  height: 44px;
+  position: absolute;
+  left: 0;
+  top: 22px;
+}
+
+input.loginpage-input-field {
+  color: #808080;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  position: absolute !important;
+  left: 0;
+  top: 22px;
+  width: 100% !important;
+  height: 44px !important;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.loginpage-forgot-password {
+  color: #4285f4;
+  text-align: left;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  position: absolute;
+  left: 1027px;
+  top: 446px;
+  width: 152.82px;
+  height: 9.66px;
+}
+
+.group-56 {
+  width: 79.24px;
+  height: 11.59px;
+  position: static;
+}
+
+.sign-in2 {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  position: absolute;
+  left: 774.08px;
+  top: 352.17px;
+  width: 79.24px;
+  height: 11.59px;
+}
+
+.group-63 {
+  position: absolute;
+  inset: 0;
+}
+
+.loginpage-welcome-wrap {
+  width: 298.99px;
+  height: 61.92px;
+  position: static;
+}
+
+.loginpage-welcome-text {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Poppins", sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  position: absolute;
+  left: 103.4px;
+  top: 202.7px;
+  width: 298.99px;
+  height: 61.92px;
+}
+
+/* --- BAGIAN YANG DIPERBAIKI UNTUK LOGO & TEKS INFRALINK --- */
+.loginpage-brand-lockup {
+  display: flex;
+  flex-direction: row;
+  align-items: center; 
+  justify-content: flex-start;
+  gap: 8px; /* Memberikan sedikit jarak tipis agar logo dan teks tidak benar-benar menabrak */
+  width: auto;
+  height: auto;
+  position: absolute;
+  left: 103px; /* Membuatnya rata kiri sejajar dengan huruf W pada 'Welcome to' */
+  top: 130px;  /* Menyesuaikan tinggi agar proporsional di atas teks Welcome */
+}
+
+.loginpage-brand-lockup-text {
+  text-align: center;
+  font-family: "Gugi", cursive, sans-serif;
+  font-size: 32px; /* <-- Ukuran teks INFRALINK diperbesar drastis menyamai desain Figma */
+  line-height: 1;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+  position: relative;
+}
+
+.loginpage-brand-lockup-text-span {
+  color: #3333f4;
+}
+
+.loginpage-brand-lockup-text-span2 {
+  color: #ed1e28;
+}
+
+.loginpage-brand-icon-wrap {
+  width: 60px; 
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.loginpage-brand-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; 
+  transform: scale(1.8); /* <-- Trik ini akan me-zoom gambar untuk menghilangkan ruang transparan di pinggiran logo */
+}
+/* ----------------------------------------------------------- */
+/* ----------------------------------------------------------- */
+
+.loginpage-submit-button {
+  width: 638px;
+  height: 26px;
+  position: absolute;
+  left: 487px;
+  top: 412px;
+}
+
+.group-572 {
+  position: absolute;
+  inset: 0;
+}
+
+.loginpage-submit-button-bg {
+  background: #093fb4;
+  border-radius: 10px;
+  width: 650.98px;
+  height: 26.96px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  box-shadow: 0px 4px 19px 0px rgba(119, 147, 65, 0.3);
+}
+
+.loginpage-submit-button-text {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  position: absolute;
+  left: 285px;
+  top: 1px;
+  width: 80.83px;
+  height: 11.98px;
+}

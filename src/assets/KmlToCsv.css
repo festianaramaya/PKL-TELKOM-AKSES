@@ -1,0 +1,111 @@
+/* --- src/assets/css/KmlToCsv.css --- */
+/* Disamakan gaya & margin-nya dengan CreateLop.css / LineToPoint.css */
+
+.kml-container {
+  /* KUNCI: Jadikan transparan */
+  background: transparent !important;
+  box-shadow: none !important;
+  
+  border-radius: 8px;
+  padding: 24px;
+}
+
+/* Label "File KML *" */
+.file-kml-span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Upload Zone -- disamakan dengan .file-upload-area / .large-zone */
+/* Upload Zone -- disamakan dengan .file-upload-area / .large-zone */
+.kml2csv-upload-zone {
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 6px;
+  
+  /* Jadikan putih semi-transparan dengan efek blur tipis */
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  
+  
+  min-height: 160px;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.kml2csv-upload-zone:hover {
+  border-color: #3175f2;
+  background-color: rgba(239, 246, 255, 0.7) !important;
+}
+
+.kml2csv-upload-zone.has-file {
+  border-color: #10b981;
+  background-color: rgba(240, 253, 244, 0.7) !important;
+  border-style: solid;
+}
+
+.kml-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-upload-icon {
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.kml-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+.kml-title.success {
+  color: #10b981;
+}
+
+.kml-filename {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e293b;
+  margin: 0;
+  word-break: break-all;
+}
+
+.kml-subtitle {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Area Tombol Bawah */
+.kml-action-area {
+  margin-top: 24px;
+}
+
+/* Tombol Full-Width -- warna aktual dikontrol lewat inline style di TSX (biru #3175f2) */
+.kml-btn-convert {
+  width: 100%;
+  padding: 14px;
+  background-color: #4d535e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.kml-btn-convert:hover:not(:disabled) {
+  background-color: #4d535e;
+}
+.kml-btn-convert:disabled {
+  cursor: not-allowed;
+}

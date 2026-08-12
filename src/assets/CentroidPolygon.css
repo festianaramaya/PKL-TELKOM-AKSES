@@ -1,0 +1,164 @@
+/* Wadah Kartu Utama */
+.card {
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+/* Input & Form (Membuatnya full width & bergaris rapi) */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #334155;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    box-sizing: border-box; /* Mencegah input melebihi lebar layar */
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color, #231B4D);
+    box-shadow: 0 0 0 3px rgba(35, 27, 77, 0.1);
+}
+
+/* Area Upload Drag & Drop */
+.file-upload-area {
+    border: 2px dashed #CBD5E1;
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #F8FAFC;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-upload-area:hover, .file-upload-area.dragover {
+    border-color: var(--primary-color, #231B4D);
+    background-color: rgba(35, 27, 77, 0.04);
+}
+
+.file-upload-area.has-file {
+    border-color: #10B981;
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+.file-upload-icon {
+    margin-bottom: 16px;
+    color: var(--primary-color, #231B4D);
+    display: flex;
+    justify-content: center;
+}
+
+.file-name {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #64748B;
+}
+
+/* Bagian Judul Pilihan Ikon */
+.section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-color, #231B4D);
+}
+
+/* =========================================
+   STYLING UNTUK PILIHAN IKON PENANDA
+   ========================================= */
+
+/* Menggunakan CSS Grid agar ukuran dan jarak antar kotak selalu rapi dan sejajar */
+.cp-icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* Kotak Ikon Default */
+.cp-icon-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12px 8px;
+    border: 2px solid #E2E8F0;
+    border-radius: 8px;
+    cursor: pointer;
+    height: 105px; /* Kunci agar semua kotak memiliki tinggi yang persis sama */
+    text-align: center;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Gambar Ikon */
+.cp-icon-image {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+/* Label Teks di bawah Ikon */
+.cp-icon-name {
+    display: block;
+    width: 100%;
+    font-size: 0.8rem;
+    line-height: 1.2;
+    color: #475569;
+    font-weight: 500;
+    text-align: center;
+    white-space: normal;
+}
+
+/* 1. Kondisi saat kursor diarahkan (Hover) -> ikut Create LOP: tidak ganti warna, cuma efek angkat */
+.cp-icon-option:hover {
+    background-color: #f8fafc;
+    transform: translateY(-2px); /* Efek sedikit terangkat */
+}
+
+/* 2. Kondisi saat kotak dipilih (Selected) -> Warna Merah, sama seperti Create LOP */
+.cp-icon-option.selected {
+    border-color: #ed1e28 !important; /* Warna merah */
+    background-color: #fef2f2 !important; /* Latar belakang kemerahan sangat tipis */
+}
+
+/* Responsif untuk layar kecil (Mobile) */
+@media (max-width: 768px) {
+    .cp-icon-grid {
+        grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+        gap: 8px;
+    }
+    .cp-icon-option {
+        height: 95px;
+        padding: 10px 4px;
+    }
+}

@@ -1,0 +1,307 @@
+/* --- src/assets/css/MainLayout.css --- */
+
+/* 1. Reset & Kontainer Utama */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #fdf7f7; /* Sesuai warna background kml-to-csv */
+  font-family: "Inter", sans-serif;
+  overflow: hidden;
+}
+
+/* 2. Header Atas (Gradasi Biru) */
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 90px;
+  /* Background diambil dari file yang sama dengan LoginPage (/images/1.png),
+     tapi di-cover supaya ukurannya menyesuaikan tinggi/lebar header MainLayout
+     sendiri, bukan ukuran asli gambar atau ukuran di halaman login. */
+  background-image: url('/images/3.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 0 40px;
+  color: white;
+  border-bottom: 2px solid #000000;
+  box-shadow: inset 0px -4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-title {
+  font-family: "Gugi", sans-serif;
+  font-size: 38px;
+  font-weight: bold;
+  letter-spacing: -0.01em;
+  line-height: 0.75;
+}
+
+.logo-title span:first-child {
+  color: #3333f4;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+.logo-title span:last-child {
+  color: #ed1e28;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.logo-subtitle {
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #ffffff;
+  margin-top: -6px;
+  letter-spacing: 1.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.logo-image {
+  height: 76px;
+  width: auto;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.server-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #11e18e; /* Hijau GCP */
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: #0ba567;
+  border-radius: 50%;
+}
+
+.sdi-badge {
+  background: #ed1e28;
+  color: white;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* 3. Area Tengah (Sidebar & Konten) */
+.main-body {
+  display: flex;
+  flex: 1;
+  padding: 20px 30px;
+  gap: 24px;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: #ffffff;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+}
+
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 15px;
+  flex: 1;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 12px 20px 20px 12px;
+  color: #031536;
+  font-weight: 500;
+  font-size: 13.5px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.menu-item img {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.menu-item:hover {
+  background-color: #f1f5f9;
+}
+
+/* Saat menu aktif - gradasi biru-cyan (gelap ke terang), sample dari rectangle-350.png */
+.menu-item.active {
+  background: linear-gradient(
+    90deg,
+    #0c6397 0%,
+    #0e6698 11%,
+    #0475ad 22%,
+    #007cc2 33%,
+    #0085d0 44%,
+    #009bf2 56%,
+    #1ec0fe 67%,
+    #96dcfe 78%,
+    #c6e9ff 89%,
+    #d4f0fe 100%
+  );
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 133, 208, 0.25);
+}
+
+.sidebar-bottom {
+  padding: 20px;
+  border-top: 1px solid #e9e9ef;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #000000;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Konten Utama (Tempat fitur dirender) */
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.content-header {
+  padding: 16px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #031536;
+}
+
+/* Banner judul fitur (mis. "Line to Point") - sekarang di dalam content-area,
+   sehingga otomatis sejajar & selebar konten, bukan diposisikan manual */
+.page-title-banner {
+  margin: 20px 20px 0 20px;
+  height: 55px;
+  padding: 0 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+  /* Gradasi biru-cyan presisi, hasil sample warna dari rectangle-570.png (aset asli Figma) */
+  background: linear-gradient(
+    90deg,
+    #0c6397 0%,
+    #0e6698 11%,
+    #0475ad 22%,
+    #007cc2 33%,
+    #0085d0 44%,
+    #009bf2 56%,
+    #1ec0fe 67%,
+    #96dcfe 78%,
+    #c6e9ff 89%,
+    #d4f0fe 100%
+  );
+}
+
+.page-title-icon-wrap {
+  width: 32px;
+  height: 32px;
+  background: #ffffff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.page-title-icon-wrap img {
+  width: 18px;
+  height: 18px;
+}
+
+.content-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Wadah untuk daftar menu + tombol logout di sidebar, dibuat flex column
+   supaya logout selalu menempel di bawah tanpa perlu posisi manual */
+.sidebar-menu-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* 4. Footer Bawah */
+.app-footer {
+  height: 32px;
+  background: #15062f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px;
+  font-size: 10px;
+}
+
+.footer-left {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.footer-left span { color: #ff1414; }
+
+.footer-right {
+  display: flex;
+  gap: 40px;
+  color: #ffffff;
+  font-weight: 300;
+}

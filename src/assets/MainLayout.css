@@ -1,0 +1,291 @@
+/* Container Utama Full Screen */
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  font-family: "Poppins", "Inter", sans-serif;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+/* === HEADER MENGGUNAKAN PNG ANDA === */
+.layout-header {
+  height: 83px; /* Sesuaikan dengan tinggi gambar Header Anda */
+  width: 100%;
+  
+  /* UBAH BARIS INI DENGAN NAMA FILE PNG HEADER ANDA */
+  background-image: url('/images/header_valora2.png'); 
+  
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  display: flex;
+  justify-content: flex-end; /* Memposisikan status server di kanan */
+  align-items: center;
+  padding: 0 40px;
+  z-index: 10;
+}
+
+.header-status-area {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.server-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #ffffff; /* Ubah warna teks jika background PNG-nya gelap */
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.profile-badge {
+  background-color: #ED1E28;
+  color: white;
+  
+  /* Tetap bulat */
+  width: 40px; 
+  height: 40px; 
+  border-radius: 50%; 
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* KUNCI: Kecilkan hurufnya agar tulisan "Admin" muat di dalam lingkaran */
+  font-size: 11px; 
+  font-weight: 600;
+}
+
+/* === BODY AREA (PETA, SIDEBAR, KONTEN) === */
+.layout-body {
+  flex: 1;
+  display: flex;
+  position: relative; 
+  overflow: hidden;
+  
+  /* === INI KUNCI AGAR KOTAKNYA TIDAK MENYATU === */
+  padding: 24px; /* Memberi jarak agar kotak tidak menempel ke ujung layar */
+  gap: 24px;     /* Memberi celah kosong pemisah antara Sidebar dan Konten */
+}
+
+/* GAMBAR PETA TEMBUS PANDANG (PENTING!) */
+/* === 2. PETA UTAMA === */
+.body-bg-map {
+  position: absolute; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1; /* Peta 100% tajam sesuai desain Anda */
+  z-index: 0; 
+  pointer-events: none;
+}
+
+/* === SIDEBAR (Dibuat transparan) === */
+.layout-sidebar {
+  width: 280px;
+  padding: 30px 20px;
+  position: relative;
+  z-index: 1; 
+  
+  /* === ATUR TRANSPARANSI SIDEBAR DI SINI === */
+  /* Angka 0.35 di paling belakang adalah tingkat transparansinya (Bisa diisi 0.1 sampai 0.9) */
+  background: rgba(255, 255, 255, 0.3); 
+  
+  /* (Opsional) Tambahkan border-radius agar sudut kotaknya membulat manis */
+  border-radius: 12px; 
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+}
+
+.layout-sidebar::-webkit-scrollbar {
+  display: none;
+}
+.layout-sidebar {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  color: #1c1c1c;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.nav-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* MENU AKTIF MENGGUNAKAN PNG ANDA */
+.nav-item.active {
+  color: white;
+
+  /* UBAH BARIS INI DENGAN NAMA FILE PNG CAPSULE ACTIVE ANDA */
+  background-image: url('/images/sidebar aktif.png'); 
+  
+  background-size: cover;
+  background-position: center left;
+  background-repeat: no-repeat;
+}
+
+.nav-icon {
+  margin-right: 15px;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* === KONTEN KANAN (Dibuat transparan) === */
+/* === KONTEN KANAN (Dibuat transparan) === */
+/* === 4. KONTEN KANAN === */
+.layout-content {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  
+  /* === ATUR TRANSPARANSI DI SINI === */
+  background: rgba(255, 255, 255, 0.4); /* Samakan angka 0.75 ini dengan sidebar */
+
+  
+  border-radius: 12px; /* Sudut melengkung disamakan */
+  padding: 30px 40px; 
+  display: flex;
+  flex-direction: column; 
+  justify-content: flex-start; 
+  align-items: stretch; 
+  overflow-y: auto;
+}
+
+
+  /* =========================================
+   HEADER KHUSUS UNTUK HALAMAN FITUR
+   ========================================= */
+
+.feature-page-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px; 
+  padding: 0 20px;
+  margin-bottom: 24px; /* Jarak antara header dan formulir */
+  border-radius: 10px; 
+  
+  /* Menggunakan gambar PNG Anda */
+  background-image: url('/images/header conten.png'); 
+  background-size: cover;
+  background-position: center left;
+  
+  color: #ffffff;
+  flex-shrink: 0; /* Mencegah header gepeng */
+}
+
+.feature-page-icon {
+  width: 22px;
+  height: 22px;
+  margin-right: 15px;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* Membuat ikon menjadi putih */
+}
+
+.feature-page-title {
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.feature-page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === FOOTER === */
+.layout-footer {
+  height: 40px; 
+  width: 100%;
+  
+  /* Latar belakang PNG Anda */
+  background-image: url('/images/footbar.png'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 10;
+  
+  /* --- KUNCI PENATAAN TEKS FOOTER --- */
+  display: flex;
+  justify-content: space-between; /* Menyebar elemen ke ujung */
+  align-items: center;
+  padding: 0 40px; /* Jarak kiri kanan */
+  color: #ffffff; /* Warna teks putih */
+  font-size: 11px; /* Ukuran teks kecil dan rapi */
+  font-family: "Inter", sans-serif;
+}
+
+/* Mengakali agar teks versi berada persis di tengah */
+.footer-center {
+  flex: 1;
+  text-align: center;
+  color: #c9c9c9; /* Warna sedikit abu-abu agar tidak terlalu mencolok */
+}
+
+.footer-right {
+  color: #c9c9c9;
+}
+
+/* Warna merah khusus untuk SDI & KERJA PRAKTEK */
+.text-red {
+  color: #ED1E28;
+  font-weight: 700;
+}
+
+/* ========================================================
+   PAKSA TAMPILAN DESKTOP UNTUK SEMUA PERANGKAT TERMASUK iOS
+   ======================================================== */
+body, html {
+  min-width: 1200px !important; /* Paksa lebar minimal seperti layar laptop */
+  overflow-x: auto !important;
+}
+
+.layout-wrapper {
+  min-width: 1200px !important;
+}
+
+.layout-sidebar {
+  width: 280px !important; /* Disamakan dengan lebar awal sidebar di atas (280px) */
+  min-width: 280px !important;
+  flex-shrink: 0 !important; /* Larang Safari menyusutkan menu ini */
+}
+
+.layout-content {
+  flex-grow: 1 !important;
+  min-width: 800px !important; /* Sisa ruang untuk form di kanan */
+}

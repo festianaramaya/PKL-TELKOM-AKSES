@@ -1,0 +1,212 @@
+/* --- src/assets/css/LineToPoint.css --- */
+/* Disamakan gaya & margin-nya dengan CreateLop.css */
+
+.card {
+  /* KUNCI: Ubah dari #ffffff menjadi transparan */
+  background: transparent !important;
+  
+  /* Hapus garis dan bayangan */
+  border: none !important;
+  box-shadow: none !important;
+  
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.card-header {
+  padding: 0;
+}
+
+.card-body {
+  padding: 24px;
+}
+
+/* Grup input, jarak antar grup disamakan dengan gap antar baris di Create LOP (24px) */
+.form-group {
+  margin-bottom: 24px;
+}
+.form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #334155;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+.form-control:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Upload Zone -- disamakan dengan .large-zone di Create LOP */
+/* Upload Zone */
+.file-upload-area {
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 6px;
+  
+  /* Jadikan putih semi-transparan dengan efek blur tipis */
+  background-color: rgba(255, 255, 255, 0.4) !important;
+ 
+  
+  padding: 32px;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.file-upload-area:hover,
+.file-upload-area.dragover {
+  border-color: #3175f2;
+  background-color: rgba(239, 246, 255, 0.7) !important;
+}
+
+.file-upload-area.has-file {
+  border-color: #10b981;
+  background-color: rgba(240, 253, 244, 0.7) !important;
+  border-style: solid;
+}
+
+
+.file-upload-icon {
+  color: #1e293b;
+  margin-bottom: 12px;
+}
+
+.file-upload-area p {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.file-name {
+  font-size: 12px;
+  color: #3b82f6;
+  margin-top: 4px;
+}
+.file-upload-area.has-file .file-name {
+  color: #10b981;
+  font-weight: 500;
+}
+
+/* Judul Section (Pilih Ikon Penanda) -- disamakan dengan .lop-section-title */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 12px;
+}
+
+/* Grid Ikon -- disamakan persis dengan .lop-icon-flex di CreateLop.css */
+.ltp-icon-flex {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 12px;
+}
+
+.ltp-icon-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 12px 8px;
+  border: 2px solid #E2E8F0;
+  border-radius: 8px;
+  cursor: pointer;
+  height: 105px;
+  text-align: center;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  
+  /* Jadikan putih semi-transparan */
+  background-color: rgba(255, 255, 255, 0.4) !important;
+ 
+}
+
+.ltp-icon-option:hover {
+  background-color: rgba(248, 250, 252, 0.8) !important;
+  transform: translateY(-2px);
+}
+
+.ltp-icon-option.selected {
+  border-color: #ed1e28 !important;
+  background-color: rgba(254, 242, 242, 0.8) !important;
+}
+
+.ltp-icon-image {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.ltp-icon-name {
+  display: block;
+  width: 100%;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  color: #475569;
+  font-weight: 500;
+  text-align: center;
+  white-space: normal;
+}
+
+/* Tombol Submit -- padding & radius disamakan dengan .lop-btn-submit */
+.button-separator {
+  margin-top: 24px;
+}
+
+.btn-block {
+  width: 100%;
+  padding: 14px;
+  background-image: none !important;
+  background-color: #4d535e !important;
+  background: #4d535e !important;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.btn-block:hover:not(:disabled) {
+  background: #4d535e !important;
+}
+.btn-block:disabled {
+  background: #94a3b8 !important;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .ltp-icon-flex {
+    gap: 8px;
+  }
+}

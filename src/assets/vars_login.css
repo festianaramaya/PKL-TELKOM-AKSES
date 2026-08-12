@@ -1,0 +1,14 @@
+/* Figma Styles of your File */
+
+/* Font imports (Gugi, Poppins, Inter) — required because style_login.css
+   references these families but they were never loaded, so the browser
+   was silently falling back to a generic sans-serif font. */
+@import url('https://fonts.googleapis.com/css2?family=Gugi&family=Inter:wght@400;500&family=Poppins:ital,wght@0,300;0,400;0,500;0,600&display=swap');
+
+
+:root {
+  /* Colors */
+  /* Fonts */
+  /* Effects */
+}
+/* Figma Color Variables of your File */

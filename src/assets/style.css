@@ -1,0 +1,842 @@
+.desktop-1,
+.desktop-1 * {
+  box-sizing: border-box;
+}
+.desktop-1 {
+  background: #ffffff;
+  height: 1024px;
+  position: relative;
+  overflow: hidden;
+}
+.kml-to-dxf {
+  background: #fdf7f7;
+  width: 1440px;
+  height: 1024px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.rectangle-1 {
+  width: 1491px;
+  height: 109px;
+  position: absolute;
+  left: -51px;
+  top: -18px;
+  overflow: visible;
+  object-fit: cover;
+}
+.insfrastrukture-data-integrator {
+  color: #ffffff;
+  text-align: left;
+  font-family: "IosevkaCharon-Light", sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  position: absolute;
+  left: 100px;
+  top: 55px;
+  width: 396px;
+  height: 19px;
+}
+.line-1 {
+  margin-top: -1px;
+  border-style: solid;
+  border-color: #6e6c6c;
+  border-width: 1px 0 0 0;
+  width: 1929px;
+  height: 0px;
+  position: absolute;
+  left: 0px;
+  top: 92px;
+  transform-origin: 0 0;
+  transform: rotate(-0.089deg) scale(1, 1);
+}
+.ellipse-1 {
+  background: #ed1e28;
+  border-radius: 50%;
+  width: 42px;
+  height: 41px;
+  position: absolute;
+  left: 1196px;
+  top: 28px;
+}
+.sdi {
+  color: #fffdfd;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  position: absolute;
+  left: 1204px;
+  top: 40px;
+  width: 30px;
+  height: 15px;
+}
+.backend-connected-gcp-instance-01 {
+  color: #0ba567;
+  text-align: left;
+  font-family: "Inter-Medium", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  position: absolute;
+  left: 956px;
+  top: 41px;
+  width: 225px;
+  height: 13px;
+}
+.ellipse-2 {
+  background: #0ba567;
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+  position: absolute;
+  left: 949px;
+  top: 47px;
+}
+.rectangle-14 {
+  background: #fffdfd;
+  border-radius: 15px;
+  width: 280px;
+  height: 841px;
+  position: absolute;
+  left: 37px;
+  top: 116px;
+}
+.welcome {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 99px;
+  top: 121px;
+  width: 115px;
+  height: 18px;
+}
+.image-3 {
+  width: 93px;
+  height: 54px;
+  position: absolute;
+  left: 45px;
+  top: 179px;
+  aspect-ratio: 93/54;
+}
+.rectangle-26 {
+  background: #15062f;
+  width: 1440px;
+  height: 36px;
+  position: absolute;
+  left: 0px;
+  top: 988px;
+}
+._2026-telkom-indonesia-akses-infrastructure-management-tool-developed-by-sdi-kerja-praktek-pens {
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  position: absolute;
+  left: 50px;
+  top: 999px;
+  width: 546px;
+  height: 14px;
+}
+._2026-telkom-indonesia-akses-infrastructure-management-tool-developed-by-sdi-kerja-praktek-pens-span {
+  color: #ffffff;
+}
+._2026-telkom-indonesia-akses-infrastructure-management-tool-developed-by-sdi-kerja-praktek-pens-span2 {
+  color: #ff1414;
+}
+.version-3-4-1-stable {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Inter-Light", sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+  position: absolute;
+  left: 897px;
+  top: 1000px;
+  width: 100px;
+  height: 11px;
+}
+.cloud-deploy-google-cloud-console {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Inter-Light", sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+  position: absolute;
+  left: 1143px;
+  top: 1001px;
+  width: 173px;
+  height: 11px;
+}
+.image-15 {
+  width: 10.05%;
+  height: 96.45px;
+  position: absolute;
+  right: 89.72%;
+  left: 0.23%;
+  top: 9px;
+  object-fit: cover;
+  aspect-ratio: 144.67/96.45;
+}
+.infralink {
+  text-align: center;
+  font-family: "Gugi-Regular", sans-serif;
+  font-size: 32px;
+  line-height: 22px;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+  position: absolute;
+  left: 98px;
+  top: 30px;
+}
+.infralink-span {
+  color: #3333f4;
+}
+.infralink-span2 {
+  color: #ed1e28;
+}
+.rectangle-32 {
+  background: #ffffff;
+  border-radius: 10px;
+  width: 1029px;
+  height: 841px;
+  position: absolute;
+  left: 356px;
+  top: 116px;
+}
+.mdi-home-variant {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 62px;
+  top: 121px;
+  overflow: visible;
+  aspect-ratio: 1;
+}
+.rectangle-57 {
+  border-radius: 10px;
+  width: 1029px;
+  height: 70px;
+  position: absolute;
+  left: 356px;
+  top: 116px;
+  object-fit: cover;
+}
+.kml-to-dxf2 {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  position: absolute;
+  left: 432px;
+  top: 139px;
+  width: 206px;
+  height: 20px;
+}
+.frame-13 {
+  width: 286px;
+  height: 731px;
+  position: absolute;
+  left: 37px;
+  top: 116px;
+  overflow-y: auto;
+}
+.rectangle-35 {
+  border-radius: 15px;
+  width: 280px;
+  height: 43px;
+  position: absolute;
+  left: 0px;
+  top: 417px;
+  object-fit: cover;
+}
+.welcome2 {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 60px;
+  top: 13px;
+  width: 115px;
+  height: 18px;
+}
+.image-16 {
+  width: 93px;
+  height: 54px;
+  position: absolute;
+  left: 0px;
+  top: 16px;
+  aspect-ratio: 93/54;
+}
+.create-lop {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 60px;
+  top: 72px;
+  width: 98px;
+  height: 19px;
+}
+.line-to-point {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 60px;
+  top: 125px;
+  width: 173px;
+  height: 19px;
+}
+.rename-placemarks {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 60px;
+  top: 188px;
+  width: 173px;
+  height: 19px;
+}
+.centroid-polygon {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 60px;
+  top: 243px;
+  width: 173px;
+  height: 19px;
+}
+.wkt-to-kml {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 60px;
+  top: 303px;
+  width: 173px;
+  height: 19px;
+}
+.kml-to-csv {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 63px;
+  top: 368px;
+  width: 173px;
+  height: 19px;
+}
+.kml-to-dxf3 {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 63px;
+  top: 429px;
+  width: 173px;
+  height: 19px;
+}
+.point-in-polygon {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 63px;
+  top: 487px;
+  width: 173px;
+  height: 19px;
+}
+.polygon-in-polygon {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  position: absolute;
+  left: 65px;
+  top: 549px;
+  width: 173px;
+  height: 19px;
+}
+.frame {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 16px;
+  top: 70px;
+  overflow: visible;
+}
+.frame2 {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 16px;
+  top: 123px;
+  overflow: visible;
+}
+.frame3 {
+  width: 21px;
+  height: 19px;
+  position: absolute;
+  left: 22px;
+  top: 188px;
+  overflow: visible;
+}
+.frame4 {
+  width: 36px;
+  height: 42px;
+  position: absolute;
+  left: 16px;
+  top: 232px;
+  overflow: visible;
+}
+.mdi-home-variant2 {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 16px;
+  top: 10px;
+  overflow: visible;
+  aspect-ratio: 1;
+}
+.frame5 {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 25px;
+  top: 301px;
+  overflow: visible;
+}
+.frame6 {
+  width: 24px;
+  height: 22px;
+  position: absolute;
+  left: 28px;
+  top: 428px;
+  overflow: hidden;
+}
+.vector {
+  width: 66.67%;
+  height: 83.33%;
+  position: absolute;
+  right: 16.67%;
+  left: 16.67%;
+  bottom: 8.33%;
+  top: 8.33%;
+  overflow: visible;
+}
+.vector2 {
+  width: 25%;
+  height: 25%;
+  position: absolute;
+  right: 16.67%;
+  left: 58.33%;
+  bottom: 66.67%;
+  top: 8.33%;
+  overflow: visible;
+}
+.dxf {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 3px;
+  font-weight: 700;
+  position: absolute;
+  right: 20.83%;
+  left: 54.17%;
+  width: 25%;
+  bottom: 4.55%;
+  top: 77.27%;
+  height: 18.18%;
+}
+.frame7 {
+  width: 24px;
+  height: 22px;
+  position: absolute;
+  left: 25px;
+  top: 362px;
+  overflow: hidden;
+}
+.vector3 {
+  width: 66.67%;
+  height: 83.33%;
+  position: absolute;
+  right: 16.67%;
+  left: 16.67%;
+  bottom: 8.33%;
+  top: 8.33%;
+  overflow: visible;
+}
+.vector4 {
+  width: 25%;
+  height: 25%;
+  position: absolute;
+  right: 16.67%;
+  left: 58.33%;
+  bottom: 66.67%;
+  top: 8.33%;
+  overflow: visible;
+}
+.csv {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 3px;
+  font-weight: 700;
+  position: absolute;
+  right: 16.67%;
+  left: 54.17%;
+  width: 29.17%;
+  bottom: 4.55%;
+  top: 77.27%;
+  height: 18.18%;
+}
+.frame8 {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 31px;
+  top: 547px;
+  overflow: hidden;
+}
+.vector5 {
+  width: 58.33%;
+  height: 58.33%;
+  position: absolute;
+  right: 20.83%;
+  left: 20.83%;
+  bottom: 20.83%;
+  top: 20.83%;
+  overflow: visible;
+}
+.vector6 {
+  width: 16.67%;
+  height: 16.67%;
+  position: absolute;
+  right: 70.83%;
+  left: 12.5%;
+  bottom: 70.83%;
+  top: 12.5%;
+  overflow: visible;
+}
+.vector7 {
+  width: 16.67%;
+  height: 16.67%;
+  position: absolute;
+  right: 12.5%;
+  left: 70.83%;
+  bottom: 70.83%;
+  top: 12.5%;
+  overflow: visible;
+}
+.vector8 {
+  width: 16.67%;
+  height: 16.67%;
+  position: absolute;
+  right: 70.83%;
+  left: 12.5%;
+  bottom: 12.5%;
+  top: 70.83%;
+  overflow: visible;
+}
+.vector9 {
+  width: 16.67%;
+  height: 16.67%;
+  position: absolute;
+  right: 12.5%;
+  left: 70.83%;
+  bottom: 12.5%;
+  top: 70.83%;
+  overflow: visible;
+}
+.mask-group {
+  height: auto;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  overflow: visible;
+}
+.vector10 {
+  width: 20.83%;
+  height: 20.83%;
+  position: absolute;
+  right: 45.83%;
+  left: 33.33%;
+  bottom: 45.83%;
+  top: 33.33%;
+  overflow: visible;
+}
+.vector11 {
+  width: 71.68%;
+  height: 45.51%;
+  position: absolute;
+  right: 12.24%;
+  left: 16.08%;
+  bottom: 665.57%;
+  top: -611.08%;
+  overflow: visible;
+}
+.rectangle-36 {
+  background: #e9e9ef;
+  border-radius: 10px;
+  width: 218px;
+  height: 37px;
+  position: absolute;
+  left: 31px;
+  top: 612px;
+}
+.dark-mode {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  position: absolute;
+  left: 106px;
+  top: 621px;
+  width: 81px;
+  height: 19px;
+}
+.solar-moon-bold-duotone {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 71px;
+  top: 619px;
+  overflow: visible;
+  aspect-ratio: 1;
+}
+.mdi-circle-double {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 28px;
+  top: 485px;
+  overflow: visible;
+  aspect-ratio: 1;
+}
+.frame-16 {
+  width: 944px;
+  height: 706px;
+  position: absolute;
+  left: 405px;
+  top: 208px;
+  overflow-y: auto;
+}
+.frame-17 {
+  width: 944px;
+  height: 682px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  overflow-y: auto;
+}
+.frame-14 {
+  width: 900px;
+  height: 155px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+.panjang-drag-file {
+  width: 903px;
+  height: 161px;
+  position: absolute;
+  left: 10px;
+  top: 52px;
+}
+.vector-5 {
+  border-radius: 0px;
+  width: 903px;
+  height: 161px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  overflow: visible;
+}
+.belum-ada-file-dipilih {
+  color: #908c8c;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  position: absolute;
+  left: 412px;
+  top: 96px;
+  width: 98px;
+  height: 14px;
+}
+.klik-untuk-memilih-file-atau-drag-drop-di-sini {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  position: absolute;
+  left: 332px;
+  top: 73px;
+  width: 257px;
+  height: 15px;
+}
+.vector12 {
+  width: 5.01%;
+  height: 19.48%;
+  position: absolute;
+  right: 46.48%;
+  left: 48.5%;
+  bottom: 59.4%;
+  top: 21.12%;
+  overflow: visible;
+}
+.preview-lokasi-peta {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-SemiBold", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  position: absolute;
+  left: 10px;
+  top: 229px;
+  width: 145px;
+  height: 17px;
+}
+.file-kml {
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  position: absolute;
+  left: 10px;
+  top: 21px;
+  width: 114px;
+  height: 19px;
+}
+.file-kml-span {
+  color: #000000;
+}
+.file-kml-span2 {
+  color: #ed1e28;
+}
+.mdi-cloud-upload {
+  width: 45px;
+  height: 45px;
+  position: absolute;
+  left: 177px;
+  top: 172px;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+.map-maker-rungkut-surabaya-east-java-indonesia-standard {
+  border-radius: 10px;
+  width: 877px;
+  height: 345px;
+  position: absolute;
+  left: 23px;
+  top: 263px;
+  object-fit: cover;
+  aspect-ratio: 877/345;
+}
+.frame-19 {
+  width: 784px;
+  height: 27px;
+  position: absolute;
+  left: 83px;
+  top: 642px;
+}
+.rectangle-74 {
+  background: linear-gradient(
+    90deg,
+    rgba(64, 113, 245, 1) 0%,
+    rgba(49, 117, 242, 0.38) 50%,
+    rgba(4, 106, 209, 1) 100%
+  );
+  border-radius: 10px;
+  border-style: solid;
+  border-color: #010b22;
+  border-width: 2px;
+  width: 784px;
+  height: 27px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  box-shadow: 0px 8px 0px 0px rgba(1, 5, 16, 1);
+}
+.konversi-ke-dxf {
+  color: #ffffff;
+  text-align: left;
+  font-family: "IstokWeb-Bold", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  position: absolute;
+  left: 320px;
+  top: 5px;
+  width: 403px;
+  height: 19px;
+}
+.frame9 {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 377px;
+  top: 130px;
+  overflow: hidden;
+}
+.vector13 {
+  width: 66.67%;
+  height: 83.33%;
+  position: absolute;
+  right: 16.67%;
+  left: 16.67%;
+  bottom: 8.33%;
+  top: 8.33%;
+  overflow: visible;
+}
+.vector14 {
+  width: 25%;
+  height: 25%;
+  position: absolute;
+  right: 16.67%;
+  left: 58.33%;
+  bottom: 66.67%;
+  top: 8.33%;
+  overflow: visible;
+}
+.dxf2 {
+  color: #ffffff;
+  text-align: left;
+  font-family: "Inter-Bold", sans-serif;
+  font-size: 5px;
+  font-weight: 700;
+  position: absolute;
+  right: 16.67%;
+  left: 54.17%;
+  width: 29.17%;
+  bottom: 4.55%;
+  top: 77.27%;
+  height: 18.18%;
+}

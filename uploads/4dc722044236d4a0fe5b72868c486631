@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>KAPASAN RW 01 SURABAYA.kml</name>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="msn_ylw-pushpin104">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_ylw-pushpin040</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_ylw-pushpin002</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="sh_ylw-pushpin002">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00ff55</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>4000ff55</color>
+		</PolyStyle>
+	</Style>
+	<Style id="sn_ylw-pushpin040">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00ff55</color>
+			<width>3</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>4000ff55</color>
+		</PolyStyle>
+	</Style>
+	<Folder>
+		<name>KAPASAN RW 01 SURABAYA</name>
+		<Folder>
+			<name>POLYGON</name>
+			<Placemark>
+				<name>KAPASAN RW 01</name>
+				<styleUrl>#msn_ylw-pushpin104</styleUrl>
+				<Polygon>
+					<tessellate>1</tessellate>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								112.7539934003754,-7.244965662662992,0 112.7540063292218,-7.245083257397693,0 112.7541939384574,-7.245056862296981,0 112.7545727425373,-7.244956350332689,0 112.7548438915737,-7.244835971443053,0 112.7551566636619,-7.244694342158514,0 112.7554702449319,-7.244486253746636,0 112.7557321266042,-7.24425513556888,0 112.7559390767896,-7.244028875599542,0 112.7561423363374,-7.243765053006539,0 112.7563188405224,-7.24347646754753,0 112.7564741899785,-7.243152764167307,0 112.7564766803888,-7.24315030130855,0 112.756608485717,-7.242788957573175,0 112.7568899053245,-7.241959368193231,0 112.7564108398593,-7.241800829395322,0 112.756103599472,-7.241709521945061,0 112.7556808957862,-7.241575517124879,0 112.7553636616935,-7.241478391209816,0 112.7551907813831,-7.241968407737343,0 112.7548728817457,-7.242730336750004,0 112.7548582765234,-7.24272371515461,0 112.7546182910813,-7.243281832460787,0 112.7542841669999,-7.244121770601097,0 112.7541257848482,-7.244543005595398,0 112.7539934003754,-7.244965662662992,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</Placemark>
+		</Folder>
+		<Folder>
+			<name>HP</name>
+			<Placemark>
+				<name>PRAKTER DOKTER</name>
+				<styleUrl>#m_ylw-pushpin</styleUrl>
+				<Polygon>
+					<tessellate>1</tessellate>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								112.7552579956218,-7.241955080905731,0 112.7552272618965,-7.242023180481782,0 112.7553586491424,-7.242090234645358,0 112.755398989246,-7.242004945746544,0 112.7552579956218,-7.241955080905731,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</Placemark>
+			<Placemark>
+				<name>66</name>
+				<styleUrl>#m_ylw-pushpin</styleUrl>
+				<Polygon>
+					<tessellate>1</tessellate>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								112.7552261484825,-7.242027505600173,0 112.7552122170056,-7.242103232427747,0 112.7553218558357,-7.24215388848816,0 112.7553521351686,-7.242097792233015,0 112.7552261484825,-7.242027505600173,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</Placemark>
+			<Placemark>
+				<name>62B</name>
+				<styleUrl>#m_ylw-pushpin</styleUrl>
+				<Polygon>
+					<tessellate>1</tessellate>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								112.7551942598064,-7.242101923440788,0 112.7551702480186,-7.242151075522976,0 112.7552066724105,-7.24216853296137,0 112.7552337114747,-7.242123435312358,0 112.7551942598064,-7.242101923440788,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</Placemark>
+			<Placemark>
+				<name>64</name>
+				<styleUrl>#m_ylw-pushpin</styleUrl>
+				<Polygon>
+					<tessellate>1</tessellate>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								112.7552559531597,-7.24213360534787,0 112.7552419226306,-7.24217865629095,0 112.7553168925161,-7.24221059860167,0 112.7553446004927,-7.242170201490359,0 112.7552559531597,-7.24213360534787,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</Placemark>
+			<Placemark>
+				<name>RUMAH KOSONG</name>
+				<styleUrl>#m_ylw-pushpin</styleUrl>
+				<Polygon>
+					<tessellate>1</tessellate>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								112.7551976840391,-7.242175787395083,0 112.7551671458235,-7.242245432242436,0 112.7552677160791,-7.242280747263614,0 112.755307234978,-7.24221180169358,0 112.7551976840391,-7.242175787395083,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</Placemark>
+			<Placemark>
+				<name>60</name>
+				<styleUrl>#m_ylw-pushpin</styleUrl>
+				<Polygon>
+					<tessellate>1</tessellate>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								112.755182893371,-7.242256633174843,0 112.7551282271113,-7.242230281035273,0 112.7550945005558,-7.242315049460586,0 112.7551579563181,-7.242343617541868,0 112.755182893371,-7.242256633174843,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</Placemark>
+			<Placemark>
+				<name>58</name>
+				<styleUrl>#m_ylw-pushpin</styleUrl>
+				<Polygon>
+					<tessellate>1</tessellate>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								112.755194768872,-7.242268905019722,0 112.7551631602533,-7.242358261498755,0 112.7552487089728,-7.242391769699076,0 112.7552722182523,-7.242338292574348,0 112.7552389206696,-7.242319837744752,0 112.755245020708,-7.242286833272581,0 112.755194768872,-7.242268905019722,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</Placemark>
+		</Folder>
+		<atom:link rel="app" href="https://www.google.com/earth/about/versions/#earth-pro" title="Google Earth Pro 7.3.7.1155"></atom:link>
+	</Folder>
+</Document>
+</kml>

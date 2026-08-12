@@ -1,0 +1,250 @@
+
+.wkt-wrapper {
+  /* KUNCI: Jadikan transparan */
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  
+  border-radius: 8px;
+  padding-bottom: 24px;
+}
+
+.wkt-form-container {
+  padding: 24px 24px 0 24px;
+}
+
+.wkt-form-group {
+  margin-bottom: 24px;
+}
+
+/* Label */
+.wkt-form-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+.wkt-form-label span { color: #ED1E28; }
+.wkt-help-text { font-size: 11px; color: #64748b; margin-top: 8px; display: block; }
+
+/* Upload Zone */
+/* Upload Zone */
+.wkt-upload-zone {
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 6px;
+  
+  /* Jadikan putih semi-transparan dengan efek blur tipis */
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 160px;
+  padding: 24px;
+}
+
+.wkt-upload-zone:hover { 
+  border-color: #3b82f6; 
+  background-color: rgba(239, 246, 255, 0.7) !important; 
+}
+
+.wkt-upload-zone.has-file { 
+  border-color: #10b981; 
+  background-color: rgba(240, 253, 244, 0.7) !important; 
+  border-style: solid; 
+}
+
+.wkt-upload-title { font-size: 14px; font-weight: 500; color: #1e293b; margin-top: 12px; }
+.wkt-upload-subtitle { font-size: 12px; color: #3b82f6; margin-top: 4px; }
+
+/* Judul Section */
+.wkt-section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 12px;
+}
+
+/* Radio: Sumber Geometri */
+.wkt-radio-group {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+/* Radio: Sumber Geometri */
+.wkt-radio-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  /* Jadikan putih semi-transparan */
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  
+}
+
+.wkt-radio-option:hover { 
+  border-color: #3b82f6; 
+  background-color: rgba(248, 250, 252, 0.8) !important; 
+}
+
+.wkt-radio-option.selected {
+  border-color: #3175f2 !important;
+  background-color: rgba(239, 246, 255, 0.8) !important;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+.wkt-radio-option input[type="radio"] { accent-color: #3175f2; margin: 0; }
+
+/* Input Row: Pemilihan Kolom */
+.wkt-input-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.wkt-form-col { flex: 1; min-width: 200px; }
+
+.wkt-input-text {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #334155;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+.wkt-input-text:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+
+/* Checkbox: Kolom Deskripsi */
+/* Checkbox: Kolom Deskripsi */
+.wkt-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 14px;
+  
+  /* Kotak luar pembungkus checkbox */
+  background-color: rgba(248, 250, 252, 0.4) !important;
+  
+}
+
+.wkt-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  
+  /* Item checkbox di dalamnya */
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.wkt-checkbox-item:hover { 
+  border-color: #3b82f6; 
+}
+.wkt-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #475569;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.wkt-checkbox-item:hover { border-color: #3b82f6; }
+.wkt-checkbox-item input[type="checkbox"] { accent-color: #3175f2; margin: 0; }
+
+/* Tombol Submit Biru */
+.wkt-btn-submit {
+  width: 100%;
+  padding: 14px;
+  background-color: #4d535e;
+  background-image: none;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 24px;
+}
+.wkt-btn-submit:hover:not(:disabled) { background-color: #4d535e; }
+.wkt-btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
+
+.wkt-btn-loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.wkt-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  display: inline-block;
+  animation: wkt-spin 0.7s linear infinite;
+}
+@keyframes wkt-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Notifikasi hasil proses */
+.wkt-alert {
+  margin: 0 24px 24px 24px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+.wkt-alert-success {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+.wkt-alert-error {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+  .wkt-input-row { flex-direction: column; gap: 16px; }
+  .wkt-radio-group { flex-direction: column; }
+}
