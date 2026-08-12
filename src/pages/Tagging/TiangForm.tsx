@@ -37,25 +37,6 @@ export const TiangForm: React.FC = () => {
     <MainLayout pageTitle="Tagging Tiang" activeMenu="tagging">
       <div className="odp-container">
         <div className="odp-card">
-          {/* Header Banner */}
-          <div className="odp-header-banner">
-            <div className="odp-icon-box">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle cx="12" cy="12" r="8" />
-                <line x1="12" y1="2" x2="12" y2="4" />
-                <line x1="12" y1="20" x2="12" y2="22" />
-              </svg>
-            </div>
-            <span className="odp-header-title">TIANG</span>
-          </div>
-
           {/* Form Body */}
           <form onSubmit={handleSubmit} className="odp-form-body">
             {/* Field Tipe (Dropdown Tiang Eksisting) */}

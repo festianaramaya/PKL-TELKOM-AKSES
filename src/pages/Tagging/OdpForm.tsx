@@ -45,23 +45,7 @@ export const OdpForm: React.FC = () => {
       <div className="odp-container">
         <div className="odp-card">
           {/* Header Banner */}
-          <div className="odp-header-banner">
-            <div className="odp-icon-box">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <rect x="5" y="2" width="14" height="20" rx="2" />
-                <line x1="12" y1="18" x2="12" y2="18.01" />
-              </svg>
-            </div>
-            <span className="odp-header-title">ODP</span>
-          </div>
-
+          
           {/* Form Body */}
           <form onSubmit={handleSubmit} className="odp-form-body">
             {/* Field Label */}

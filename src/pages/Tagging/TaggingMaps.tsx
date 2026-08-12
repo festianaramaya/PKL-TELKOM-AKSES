@@ -134,60 +134,21 @@ const TaggingMaps: React.FC = () => {
 
         {/* MENU LEGEND / NAVIGATION CARDS */}
         <section className="tagging-legend">
-          <div
-            className="legend-card"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/tagging/odp")}
-          >
-            <div className="legend-icon odp-icon">
-              <span>◉</span>
-            </div>
-            <div className="legend-text">
-              <strong>ODP</strong>
-              <small>Optical Distribution Point</small>
-            </div>
+          <div className="legend-card" onClick={() => navigate("/tagging/odp")}>
+            <div className="legend-icon odp-icon"><span>◉</span></div>
+            <div className="legend-text"><strong>ODP</strong></div>
           </div>
-
-          <div
-            className="legend-card"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/tagging/odc")}
-          >
-            <div className="legend-icon odc-icon">
-              <span>▥</span>
-            </div>
-            <div className="legend-text">
-              <strong>ODC</strong>
-              <small>Optical Distribution Cabinet</small>
-            </div>
+          <div className="legend-card" onClick={() => navigate("/tagging/odc")}>
+            <div className="legend-icon odc-icon"><span>▥</span></div>
+            <div className="legend-text"><strong>ODC</strong></div>
           </div>
-
-          <div
-            className="legend-card"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/tagging/tiang")}
-          >
-            <div className="legend-icon tiang-icon">
-              <span>◎</span>
-            </div>
-            <div className="legend-text">
-              <strong>TIANG</strong>
-              <small>Tiang Infrastruktur</small>
-            </div>
+          <div className="legend-card" onClick={() => navigate("/tagging/tiang")}>
+            <div className="legend-icon tiang-icon"><span>◎</span></div>
+            <div className="legend-text"><strong>TIANG</strong></div>
           </div>
-
-          <div
-            className="legend-card"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/tagging/homepass")}
-          >
-            <div className="legend-icon homepass-icon">
-              <span>⌂</span>
-            </div>
-            <div className="legend-text">
-              <strong>HOMEPASS</strong>
-              <small>Homepass Pelanggan</small>
-            </div>
+          <div className="legend-card" onClick={() => navigate("/tagging/homepass")}>
+            <div className="legend-icon homepass-icon"><span>⌂</span></div>
+            <div className="legend-text"><strong>HOMEPASS</strong></div>
           </div>
         </section>
       </div>

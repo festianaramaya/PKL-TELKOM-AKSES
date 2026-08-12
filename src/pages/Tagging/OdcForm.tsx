@@ -42,23 +42,6 @@ export const OdcForm: React.FC = () => {
     <MainLayout pageTitle="Tagging ODC" activeMenu="tagging">
       <div className="odp-container">
         <div className="odp-card">
-          {/* Header Banner */}
-          <div className="odp-header-banner">
-            <div className="odp-icon-box">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <rect x="4" y="3" width="16" height="18" rx="2" />
-                <path d="M8 7h8M8 11h8M8 15h5" />
-              </svg>
-            </div>
-            <span className="odp-header-title">ODC</span>
-          </div>
 
           {/* Form Body */}
           <form onSubmit={handleSubmit} className="odp-form-body">
