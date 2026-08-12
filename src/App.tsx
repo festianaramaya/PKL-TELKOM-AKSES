@@ -20,7 +20,7 @@ import WktToKml from './pages/WktToKml';
 import PointInPolygon from './pages/PointInPolygon';
 import PolygonInPolygon from './pages/PolygonInPolygon';
 import CsvToKmlConverter from "./pages/CsvToKmlConverter";
-import TaggingMaps from "./pages/TaggingMaps";
+import TaggingMaps from "./pages/Tagging/TaggingMaps";
 
 // Placeholder yang tetap memiliki Sidebar & Header
 function UnderDevelopment({ title, activeMenu }: { title: string; activeMenu: string }) {

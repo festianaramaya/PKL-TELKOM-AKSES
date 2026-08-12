@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import MainLayout from "../components/MainLayout";
-import "../assets/TaggingMaps.css";
+import MainLayout from "../../components/MainLayout";
+import "../../assets/Tagging/TaggingMaps.css";
 
 const TaggingMaps: React.FC = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
@@ -11,15 +10,18 @@ const TaggingMaps: React.FC = () => {
 
   const [isTagging, setIsTagging] = useState(false);
 
-  // Koordinat Rungkut, Surabaya
+  // Koordinat awal Rungkut, Surabaya
   const center: L.LatLngExpression = [-7.3228, 112.7688];
 
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Jangan membuat map dua kali
+    // Mencegah map dibuat dua kali
     if (leafletMapRef.current) return;
 
+    // ==============================
+    // BUAT LEAFLET MAP
+    // ==============================
     const map = L.map(mapRef.current, {
       center,
       zoom: 14,
@@ -29,22 +31,21 @@ const TaggingMaps: React.FC = () => {
     leafletMapRef.current = map;
 
     // ==============================
-    // OPENSTREETMAP
+    // OPEN STREET MAP
     // ==============================
     L.tileLayer(
       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
         maxZoom: 19,
         attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>',
       }
     ).addTo(map);
 
     // ==============================
-    // MARKER CONTOH
+    // ICON MARKER
     // ==============================
 
-    // ODP
     const odpIcon = L.divIcon({
       className: "custom-map-marker",
       html: `
@@ -56,7 +57,6 @@ const TaggingMaps: React.FC = () => {
       iconAnchor: [25, 25],
     });
 
-    // ODC
     const odcIcon = L.divIcon({
       className: "custom-map-marker",
       html: `
@@ -68,7 +68,6 @@ const TaggingMaps: React.FC = () => {
       iconAnchor: [25, 25],
     });
 
-    // TIANG
     const tiangIcon = L.divIcon({
       className: "custom-map-marker",
       html: `
@@ -80,7 +79,6 @@ const TaggingMaps: React.FC = () => {
       iconAnchor: [27, 27],
     });
 
-    // HOMEPASS
     const homepassIcon = L.divIcon({
       className: "custom-map-marker",
       html: `
@@ -92,43 +90,91 @@ const TaggingMaps: React.FC = () => {
       iconAnchor: [27, 27],
     });
 
+    // ==============================
+    // CONTOH MARKER
+    // ==============================
+
     L.marker([-7.3205, 112.7665], {
       icon: odpIcon,
     })
       .addTo(map)
-      .bindPopup("<b>ODP</b><br>ODP Rungkut");
+      .bindPopup(`
+        <strong>ODP</strong>
+        <br />
+        ODP Rungkut
+      `);
 
     L.marker([-7.3242, 112.7712], {
       icon: odcIcon,
     })
       .addTo(map)
-      .bindPopup("<b>ODC</b><br>ODC Rungkut");
+      .bindPopup(`
+        <strong>ODC</strong>
+        <br />
+        ODC Rungkut
+      `);
 
     L.marker([-7.3198, 112.7745], {
       icon: tiangIcon,
     })
       .addTo(map)
-      .bindPopup("<b>TIANG</b><br>Tiang Telekomunikasi");
+      .bindPopup(`
+        <strong>TIANG</strong>
+        <br />
+        Tiang Telekomunikasi
+      `);
 
     L.marker([-7.3265, 112.7652], {
       icon: homepassIcon,
     })
       .addTo(map)
-      .bindPopup("<b>HOMEPASS</b><br>Homepass");
+      .bindPopup(`
+        <strong>HOMEPASS</strong>
+        <br />
+        Homepass
+      `);
+
+    // ==============================
+    // CLICK MAP UNTUK TAGGING
+    // ==============================
+
+    map.on("click", (event: L.LeafletMouseEvent) => {
+      if (!isTagging) return;
+
+      const { lat, lng } = event.latlng;
+
+      L.marker([lat, lng], {
+        icon: odpIcon,
+      })
+        .addTo(map)
+        .bindPopup(`
+          <strong>Tagging Point</strong>
+          <br />
+          Latitude: ${lat.toFixed(6)}
+          <br />
+          Longitude: ${lng.toFixed(6)}
+        `)
+        .openPopup();
+    });
+
+    // ==============================
+    // INVALIDATE SIZE
+    // ==============================
+
+    const resizeTimer = setTimeout(() => {
+      map.invalidateSize();
+    }, 300);
 
     // ==============================
     // CLEANUP
     // ==============================
 
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 300);
-
     return () => {
+      clearTimeout(resizeTimer);
       map.remove();
       leafletMapRef.current = null;
     };
-  }, []);
+  }, [isTagging]);
 
   // ==============================
   // START TAGGING
@@ -161,10 +207,9 @@ const TaggingMaps: React.FC = () => {
     >
       <div className="tagging-page">
 
-        {/* =========================
-            MAP CONTAINER
-        ========================== */}
-
+        {/* =====================================
+            MAP
+        ====================================== */}
         <section className="tagging-map-section">
 
           <div
@@ -172,20 +217,19 @@ const TaggingMaps: React.FC = () => {
             className="tagging-real-map"
           />
 
-          {/* STATUS */}
+          {/* STATUS TAGGING */}
           {isTagging && (
             <div className="tagging-status">
               <span className="status-dot"></span>
-              Tagging aktif
+              Tagging aktif — klik lokasi pada peta
             </div>
           )}
 
         </section>
 
-        {/* =========================
-            BUTTON AREA
-        ========================== */}
-
+        {/* =====================================
+            BUTTON START / STOP
+        ====================================== */}
         <div className="tagging-controls">
 
           <button
@@ -210,54 +254,73 @@ const TaggingMaps: React.FC = () => {
 
         </div>
 
-        {/* =========================
+        {/* =====================================
             LEGEND
-        ========================== */}
-
+        ====================================== */}
         <section className="tagging-legend">
 
+          {/* ODP */}
           <div className="legend-card">
+
             <div className="legend-icon odp-icon">
               <span>◉</span>
             </div>
 
             <div className="legend-text">
               <strong>ODP</strong>
-              <small>Optical Distribution Point</small>
+              <small>
+                Optical Distribution Point
+              </small>
             </div>
+
           </div>
 
+          {/* ODC */}
           <div className="legend-card">
+
             <div className="legend-icon odc-icon">
               <span>▥</span>
             </div>
 
             <div className="legend-text">
               <strong>ODC</strong>
-              <small>Optical Distribution Cabinet</small>
+              <small>
+                Optical Distribution Cabinet
+              </small>
             </div>
+
           </div>
 
+          {/* TIANG */}
           <div className="legend-card">
+
             <div className="legend-icon tiang-icon">
               <span>◎</span>
             </div>
 
             <div className="legend-text">
               <strong>TIANG</strong>
-              <small>Tiang Infrastruktur</small>
+              <small>
+                Tiang Infrastruktur
+              </small>
             </div>
+
           </div>
 
+          {/* HOMEPASS */}
           <div className="legend-card">
+
             <div className="legend-icon homepass-icon">
               <span>⌂</span>
             </div>
 
             <div className="legend-text">
               <strong>HOMEPASS</strong>
-              <small>Homepass Pelanggan</small>
+              <small>
+                Homepass Pelanggan
+              </small>
             </div>
+
           </div>
 
         </section>
