@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import MainLayout from "../../components/MainLayout";
 import "../../assets/Tagging/TaggingMaps.css";
 
 const TaggingMaps: React.FC = () => {
+  const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement | null>(null);
   const leafletMapRef = useRef<L.Map | null>(null);
 
@@ -15,13 +17,9 @@ const TaggingMaps: React.FC = () => {
 
   useEffect(() => {
     if (!mapRef.current) return;
-
-    // Mencegah map dibuat dua kali
     if (leafletMapRef.current) return;
 
-    // ==============================
     // BUAT LEAFLET MAP
-    // ==============================
     const map = L.map(mapRef.current, {
       center,
       zoom: 14,
@@ -30,9 +28,7 @@ const TaggingMaps: React.FC = () => {
 
     leafletMapRef.current = map;
 
-    // ==============================
-    // OPEN STREET MAP
-    // ==============================
+    // OPEN STREET MAP TILE
     L.tileLayer(
       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
@@ -42,10 +38,7 @@ const TaggingMaps: React.FC = () => {
       }
     ).addTo(map);
 
-    // ==============================
     // ICON MARKER
-    // ==============================
-
     const odpIcon = L.divIcon({
       className: "custom-map-marker",
       html: `
@@ -57,117 +50,25 @@ const TaggingMaps: React.FC = () => {
       iconAnchor: [25, 25],
     });
 
-    const odcIcon = L.divIcon({
-      className: "custom-map-marker",
-      html: `
-        <div class="map-marker odc-marker">
-          <span>ODC</span>
-        </div>
-      `,
-      iconSize: [50, 50],
-      iconAnchor: [25, 25],
-    });
-
-    const tiangIcon = L.divIcon({
-      className: "custom-map-marker",
-      html: `
-        <div class="map-marker tiang-marker">
-          <span>TIANG</span>
-        </div>
-      `,
-      iconSize: [55, 55],
-      iconAnchor: [27, 27],
-    });
-
-    const homepassIcon = L.divIcon({
-      className: "custom-map-marker",
-      html: `
-        <div class="map-marker homepass-marker">
-          <span>HOME</span>
-        </div>
-      `,
-      iconSize: [55, 55],
-      iconAnchor: [27, 27],
-    });
-
-    // ==============================
-    // CONTOH MARKER
-    // ==============================
-
-    L.marker([-7.3205, 112.7665], {
-      icon: odpIcon,
-    })
-      .addTo(map)
-      .bindPopup(`
-        <strong>ODP</strong>
-        <br />
-        ODP Rungkut
-      `);
-
-    L.marker([-7.3242, 112.7712], {
-      icon: odcIcon,
-    })
-      .addTo(map)
-      .bindPopup(`
-        <strong>ODC</strong>
-        <br />
-        ODC Rungkut
-      `);
-
-    L.marker([-7.3198, 112.7745], {
-      icon: tiangIcon,
-    })
-      .addTo(map)
-      .bindPopup(`
-        <strong>TIANG</strong>
-        <br />
-        Tiang Telekomunikasi
-      `);
-
-    L.marker([-7.3265, 112.7652], {
-      icon: homepassIcon,
-    })
-      .addTo(map)
-      .bindPopup(`
-        <strong>HOMEPASS</strong>
-        <br />
-        Homepass
-      `);
-
-    // ==============================
-    // CLICK MAP UNTUK TAGGING
-    // ==============================
-
+    // EVENT KLIK UNTUK TAGGING
     map.on("click", (event: L.LeafletMouseEvent) => {
       if (!isTagging) return;
 
       const { lat, lng } = event.latlng;
 
-      L.marker([lat, lng], {
-        icon: odpIcon,
-      })
+      L.marker([lat, lng], { icon: odpIcon })
         .addTo(map)
         .bindPopup(`
-          <strong>Tagging Point</strong>
-          <br />
-          Latitude: ${lat.toFixed(6)}
-          <br />
+          <strong>Tagging Point</strong><br />
+          Latitude: ${lat.toFixed(6)}<br />
           Longitude: ${lng.toFixed(6)}
         `)
         .openPopup();
     });
 
-    // ==============================
-    // INVALIDATE SIZE
-    // ==============================
-
     const resizeTimer = setTimeout(() => {
       map.invalidateSize();
     }, 300);
-
-    // ==============================
-    // CLEANUP
-    // ==============================
 
     return () => {
       clearTimeout(resizeTimer);
@@ -176,67 +77,45 @@ const TaggingMaps: React.FC = () => {
     };
   }, [isTagging]);
 
-  // ==============================
-  // START TAGGING
-  // ==============================
-
   const handleStart = () => {
     setIsTagging(true);
-
     if (leafletMapRef.current) {
       leafletMapRef.current.getContainer().style.cursor = "crosshair";
     }
   };
 
-  // ==============================
-  // STOP TAGGING
-  // ==============================
-
+  // ==========================================
+  // REVISI BAGIAN STOP
+  // ==========================================
   const handleStop = () => {
     setIsTagging(false);
-
     if (leafletMapRef.current) {
       leafletMapRef.current.getContainer().style.cursor = "";
     }
+    // Langsung navigasi ke halaman input simpan hasil tagging (.kml)
+    navigate("/tagging/keterangan");
   };
 
   return (
-    <MainLayout
-      pageTitle="Tagging Map"
-      activeMenu="tagging"
-    >
+    <MainLayout pageTitle="Tagging Map" activeMenu="tagging">
       <div className="tagging-page">
-
-        {/* =====================================
-            MAP
-        ====================================== */}
+        {/* MAP SECTION */}
         <section className="tagging-map-section">
+          <div ref={mapRef} className="tagging-real-map" />
 
-          <div
-            ref={mapRef}
-            className="tagging-real-map"
-          />
-
-          {/* STATUS TAGGING */}
           {isTagging && (
             <div className="tagging-status">
               <span className="status-dot"></span>
               Tagging aktif — klik lokasi pada peta
             </div>
           )}
-
         </section>
 
-        {/* =====================================
-            BUTTON START / STOP
-        ====================================== */}
+        {/* CONTROLS */}
         <div className="tagging-controls">
-
           <button
             type="button"
-            className={`tagging-button start-button ${
-              isTagging ? "button-active" : ""
-            }`}
+            className={`tagging-button start-button ${isTagging ? "button-active" : ""}`}
             onClick={handleStart}
           >
             <span className="button-icon">▶</span>
@@ -251,80 +130,66 @@ const TaggingMaps: React.FC = () => {
             <span className="button-icon stop-icon">□</span>
             STOP
           </button>
-
         </div>
 
-        {/* =====================================
-            LEGEND
-        ====================================== */}
+        {/* MENU LEGEND / NAVIGATION CARDS */}
         <section className="tagging-legend">
-
-          {/* ODP */}
-          <div className="legend-card">
-
+          <div
+            className="legend-card"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/tagging/odp")}
+          >
             <div className="legend-icon odp-icon">
               <span>◉</span>
             </div>
-
             <div className="legend-text">
               <strong>ODP</strong>
-              <small>
-                Optical Distribution Point
-              </small>
+              <small>Optical Distribution Point</small>
             </div>
-
           </div>
 
-          {/* ODC */}
-          <div className="legend-card">
-
+          <div
+            className="legend-card"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/tagging/odc")}
+          >
             <div className="legend-icon odc-icon">
               <span>▥</span>
             </div>
-
             <div className="legend-text">
               <strong>ODC</strong>
-              <small>
-                Optical Distribution Cabinet
-              </small>
+              <small>Optical Distribution Cabinet</small>
             </div>
-
           </div>
 
-          {/* TIANG */}
-          <div className="legend-card">
-
+          <div
+            className="legend-card"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/tagging/tiang")}
+          >
             <div className="legend-icon tiang-icon">
               <span>◎</span>
             </div>
-
             <div className="legend-text">
               <strong>TIANG</strong>
-              <small>
-                Tiang Infrastruktur
-              </small>
+              <small>Tiang Infrastruktur</small>
             </div>
-
           </div>
 
-          {/* HOMEPASS */}
-          <div className="legend-card">
-
+          <div
+            className="legend-card"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/tagging/homepass")}
+          >
             <div className="legend-icon homepass-icon">
               <span>⌂</span>
             </div>
-
             <div className="legend-text">
               <strong>HOMEPASS</strong>
-              <small>
-                Homepass Pelanggan
-              </small>
+              <small>Homepass Pelanggan</small>
             </div>
-
           </div>
-
         </section>
-
       </div>
     </MainLayout>
   );

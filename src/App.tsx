@@ -9,7 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute"; 
 import UserManagement from "./pages/UserManagement"; 
 
-// === TAMBAHKAN IMPORT FILE fitur BARU DI SINI ===
+// === TAMBAHKAN IMPORT FILE FITUR BARU DI SINI ===
 import KmlToCsv from "./pages/KmlToCsv";
 import CreateLop from "./pages/CreateLop";
 import KmlToDxf from "./pages/KmlToDxf";
@@ -21,6 +21,11 @@ import PointInPolygon from './pages/PointInPolygon';
 import PolygonInPolygon from './pages/PolygonInPolygon';
 import CsvToKmlConverter from "./pages/CsvToKmlConverter";
 import TaggingMaps from "./pages/Tagging/TaggingMaps";
+import OdpForm from "./pages/Tagging/OdpForm"; 
+import OdcForm from "./pages/Tagging/OdcForm";
+import TiangForm from "./pages/Tagging/TiangForm";
+import HomepassForm from "./pages/Tagging/HomepassForm";
+import KeteranganTaggingForm from "./pages/Tagging/SaveTagging";
 
 // Placeholder yang tetap memiliki Sidebar & Header
 function UnderDevelopment({ title, activeMenu }: { title: string; activeMenu: string }) {
@@ -59,7 +64,6 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/kml-to-dxf" element={<KmlToDxf />} />
-          {/* === GANTI RUTE KML TO CSV MENJADI SEPERTI INI === */}
           <Route path="/kml-to-csv" element={<KmlToCsv />} />
           <Route path="/create-lop" element={<CreateLop />} />
           <Route path="line-to-point" element={<LineToPoint />} />
@@ -69,7 +73,15 @@ export default function App() {
           <Route path="point-in-polygon" element={<PointInPolygon />} />
           <Route path="polygon-in-polygon" element={<PolygonInPolygon />} />
           <Route path="/csv-to-kml" element={<CsvToKmlConverter />} />
-          <Route path="/tagging" element={<TaggingMaps />}/>
+          <Route path="/tagging" element={<TaggingMaps />} />
+          
+                  
+          {/* === RUTE SUB-HALAMAN TAGGING === */}
+          <Route path="/tagging/odp" element={<OdpForm />} />
+          <Route path="/tagging/odc" element={<OdcForm />} />
+          <Route path="/tagging/tiang" element={<TiangForm />} />
+          <Route path="/tagging/homepass" element={<HomepassForm />} />
+          <Route path="/tagging/keterangan" element={<KeteranganTaggingForm />} />
 
           {/* Fitur-Fitur Placeholder (Tetap menggunakan Layout) */}
           <Route path="/create-lop" element={<UnderDevelopment title="Create LOP" activeMenu="create-lop" />} />
