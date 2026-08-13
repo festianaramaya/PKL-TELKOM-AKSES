@@ -22,26 +22,31 @@ const TaggingMaps: React.FC = () => {
   const layerGroupRef = useRef<L.LayerGroup | null>(null);
 
   // Ambil marker lama & status tagging dari state navigasi
-  const initialMarkers: TaggingMarkerData[] = location.state?.existingMarkers || [];
+  const initialMarkers: TaggingMarkerData[] =
+    location.state?.markers || location.state?.existingMarkers || [];
   const initialIsTagging: boolean = location.state?.isTagging ?? false;
 
   const [isTagging, setIsTagging] = useState<boolean>(initialIsTagging);
   const [markers, setMarkers] = useState<TaggingMarkerData[]>(initialMarkers);
 
-  // 1. MENERIMA MARKER BARU DARI FORM
+  // 1. MENERIMA MARKER DARI FORM / DARI HALAMAN SHARE
   useEffect(() => {
+    // Jika kembali dari Form Input
     if (location.state?.newMarker) {
       const newMarker = location.state.newMarker as TaggingMarkerData;
-      
+
       setMarkers((prev) => {
-        // Mencegah penambahan duplikat berdasarkan ID
         if (prev.some((m) => m.id === newMarker.id)) return prev;
         return [...prev, newMarker];
       });
 
-      setIsTagging(true); // Pastikan sesi START tetap aktif
-
-      // Hapus state navigasi sementara agar tidak dobel saat refresh
+      setIsTagging(true);
+      window.history.replaceState({}, document.title);
+    } 
+    // Jika kembali dari Halaman Share (Membawa markers hasil tracking)
+    else if (location.state?.markers) {
+      setMarkers(location.state.markers);
+      setIsTagging(false); // Mode tracking selesai
       window.history.replaceState({}, document.title);
     }
   }, [location.state]);
@@ -63,7 +68,6 @@ const TaggingMaps: React.FC = () => {
           '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>',
       }).addTo(map);
 
-      // Buat LayerGroup khusus untuk menampung seluruh marker
       const layerGroup = L.layerGroup().addTo(map);
       layerGroupRef.current = layerGroup;
       leafletMapRef.current = map;
@@ -82,47 +86,78 @@ const TaggingMaps: React.FC = () => {
     };
   }, []);
 
-  // 3. RENDER MARKER SETIAP KALI DATA MARKERS BERUBAH
+  // 3. RENDER MARKER & GARIS ROUTE (TRACKING)
   useEffect(() => {
     const layerGroup = layerGroupRef.current;
     const map = leafletMapRef.current;
     if (!layerGroup || !map) return;
 
-    // Bersihkan marker lama dari layer group
     layerGroup.clearLayers();
 
-    // Gambar ulang semua marker yang ada di state
-    markers.forEach((item) => {
-      const customIcon = L.divIcon({
-        className: "custom-map-marker",
-        html: `
-          <div class="map-marker ${item.type.toLowerCase()}-marker">
-            <span>${item.type}</span>
+    if (markers.length > 0) {
+      // (A) Gambar Garis Rute (Polyline) jika tagging sudah di-STOP / Selesai
+      if (!isTagging && markers.length > 1) {
+        const polylineCoords: L.LatLngTuple[] = markers.map((m) => [m.lat, m.lng]);
+        const polyline = L.polyline(polylineCoords, {
+          color: "#0f172a",
+          weight: 3.5,
+          opacity: 0.9,
+        });
+        layerGroup.addLayer(polyline);
+      }
+
+      // (B) Render Marker & Badge START/STOP
+      markers.forEach((item, index) => {
+        const isFirst = index === 0;
+        const isLast = index === markers.length - 1;
+        const showBadges = !isTagging; // Badge START/STOP muncul saat tagging di-STOP
+
+        let iconSymbol = "⚪";
+        if (item.type === "ODP") iconSymbol = "🗄️";
+        if (item.type === "ODC") iconSymbol = "📦";
+        if (item.type === "HOMEPASS") iconSymbol = "🏠";
+
+        const pinHtml = `
+          <div class="figma-tracking-pin">
+            ${showBadges && isFirst ? '<div class="badge-capsule start-capsule">START</div>' : ""}
+            ${showBadges && isLast ? '<div class="badge-capsule stop-capsule">STOP</div>' : ""}
+            
+            <div class="node-circle"></div>
+            
+            <div class="label-capsule">
+              <span class="icon-span">${iconSymbol}</span>
+              <span>${item.label || item.type}</span>
+            </div>
           </div>
-        `,
-        iconSize: [50, 50],
-        iconAnchor: [25, 25],
+        `;
+
+        const customIcon = L.divIcon({
+          className: "leaflet-tracking-marker-container",
+          html: pinHtml,
+          iconSize: [120, 40],
+          iconAnchor: [15, 20],
+        });
+
+        const marker = L.marker([item.lat, item.lng], { icon: customIcon }).bindPopup(`
+          <strong>${item.label || item.type}</strong><br />
+          Latitude: ${item.lat.toFixed(6)}<br />
+          Longitude: ${item.lng.toFixed(6)}
+          ${item.keterangan ? `<br />Ket: ${item.keterangan}` : ""}
+        `);
+
+        layerGroup.addLayer(marker);
       });
 
-      const marker = L.marker([item.lat, item.lng], { icon: customIcon }).bindPopup(`
-        <strong>${item.label || item.type}</strong><br />
-        Latitude: ${item.lat.toFixed(6)}<br />
-        Longitude: ${item.lng.toFixed(6)}
-        ${item.keterangan ? `<br />Ket: ${item.keterangan}` : ""}
-      `);
-
-      layerGroup.addLayer(marker);
-    });
-
-    // Otomatis geser/fokuskan pandangan peta ke marker paling baru yang diinput
-    if (markers.length > 0) {
-      const lastMarker = markers[markers.length - 1];
-      map.setView([lastMarker.lat, lastMarker.lng], 16);
+      // Fit View ke Seluruh Marker
+      const polylineCoords: L.LatLngTuple[] = markers.map((m) => [m.lat, m.lng]);
+      const bounds = L.latLngBounds(polylineCoords);
+      map.fitBounds(bounds, { padding: [50, 50] });
     }
-  }, [markers]);
+  }, [markers, isTagging]);
 
-  // HANDLER START
+  // HANDLER START (BERSIHKAN PETA SAAT KLIK START)
   const handleStart = () => {
+    setMarkers([]); // Kosongkan peta untuk sesi rekam baru
     setIsTagging(true);
   };
 
@@ -141,7 +176,10 @@ const TaggingMaps: React.FC = () => {
     };
 
     navigate("/tagging/save", {
-      state: { fileSize: formatFileSize(estimatedBytes) },
+      state: { 
+        fileSize: formatFileSize(estimatedBytes),
+        markers: markers 
+      },
     });
   };
 

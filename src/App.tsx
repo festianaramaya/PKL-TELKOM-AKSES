@@ -28,6 +28,7 @@ import HomepassForm from "./pages/Tagging/HomepassForm";
 import KeteranganTaggingForm from "./pages/Tagging/SaveTagging";
 import SaveTagging from "./pages/Tagging/SaveTagging";
 import TaggingShare from "./pages/Tagging/TaggingShare";
+import TaggingTracking from "./pages/Tagging/TaggingTracking";
 
 // Placeholder yang tetap memiliki Sidebar & Header
 function UnderDevelopment({ title, activeMenu }: { title: string; activeMenu: string }) {
@@ -84,6 +85,7 @@ export default function App() {
           <Route path="/tagging/keterangan" element={<KeteranganTaggingForm />} />
           <Route path="/tagging/save" element={<SaveTagging />} />
           <Route path="/tagging/share" element={<TaggingShare />} />
+          <Route path="/tagging/tracking" element={<TaggingTracking />} />
           
 
           {/* Fitur-Fitur Placeholder (Tetap menggunakan Layout) */}

@@ -1,12 +1,65 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
 import '../../assets/Tagging/SaveTagging.css';
 
+interface TaggingMarkerData {
+  id: string;
+  lat: number;
+  lng: number;
+  type: string;
+  label?: string;
+  keterangan?: string;
+}
+
 export const SaveTagging: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const locationState = location.state as {
+    fileSize?: string;
+    markers?: TaggingMarkerData[];
+  } | null;
+
+  const markers = locationState?.markers || [];
+
   const [fileName, setFileName] = useState<string>('');
   const [error, setError] = useState<boolean>(false);
+
+  // Helper Konversi Ukuran Byte -> KB / MB
+  const formatBytes = (bytes: number): string => {
+    if (bytes === 0) return '0 KB';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  // Fungsi Pembuat File .kml Sungguhan
+  const generateKmlBlob = (docName: string, points: TaggingMarkerData[]): Blob => {
+    const placemarksXml = points
+      .map(
+        (p) => `
+    <Placemark>
+      <name>${p.label || p.type}</name>
+      <description>Tipe: ${p.type}${p.keterangan ? ' - Ket: ' + p.keterangan : ''}</description>
+      <Point>
+        <coordinates>${p.lng},${p.lat},0</coordinates>
+      </Point>
+    </Placemark>`
+      )
+      .join('');
+
+    const kmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>${docName}</name>
+    ${placemarksXml}
+  </Document>
+</kml>`;
+
+    return new Blob([kmlContent], { type: 'application/vnd.google-earth.kml+xml' });
+  };
 
   const handleLanjutkan = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,12 +74,26 @@ export const SaveTagging: React.FC = () => {
       cleanedName += '.kml';
     }
 
-    // Pindah ke halaman TaggingShare sambil membawa nama file
-    navigate('/tagging/share', { state: { fileName: cleanedName } });
+    // 1. Buat Blob File KML Asli
+    const kmlBlob = generateKmlBlob(cleanedName, markers);
+
+    // 2. Buat URL Download yang Bisa Dipakai browser
+    const fileUrl = URL.createObjectURL(kmlBlob);
+    const actualSize = formatBytes(kmlBlob.size);
+
+    // 3. Kirim File URL, Ukuran Asli, & Markers ke TaggingShare
+    navigate('/tagging/share', {
+      state: {
+        fileName: cleanedName,
+        fileSize: actualSize,
+        fileUrl: fileUrl,
+        markers: markers,
+      },
+    });
   };
 
   return (
-    <MainLayout pageTitle="Tagging Save" activeMenu="tagging">
+    <MainLayout pageTitle="Tagging SAVE" activeMenu="tagging">
       <div className="save-tagging-page">
         <div className="share-rename-container">
           <div className="audit-icon-wrapper">
