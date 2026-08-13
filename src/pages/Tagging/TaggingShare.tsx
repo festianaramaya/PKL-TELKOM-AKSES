@@ -15,7 +15,7 @@ interface TaggingMarkerData {
 interface LocationState {
   fileName?: string;
   fileSize?: string;
-  fileUrl?: string;
+  fileUrl?: string; 
   markers?: TaggingMarkerData[];
 }
 
@@ -26,10 +26,8 @@ export const TaggingShare: React.FC = () => {
   const state = location.state as LocationState | null;
   const fileName = state?.fileName || 'Hasil_Tagging.kml';
   const fileSize = state?.fileSize || '15.4 KB';
-  const fileUrl = state?.fileUrl;
   const markers = state?.markers || [];
 
-  // Helper untuk membuat file KML sungguhan
   const getKmlFile = (): File => {
     const placemarksXml = markers
       .map(
@@ -61,56 +59,71 @@ export const TaggingShare: React.FC = () => {
     });
   };
 
-  // Unduh File KML
   const handleDownloadKml = () => {
-    if (!fileUrl) return;
+    const kmlFile = getKmlFile();
+    const url = URL.createObjectURL(kmlFile);
+    
     const a = document.createElement('a');
-    a.href = fileUrl;
+    a.href = url;
     a.download = fileName;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    
+    URL.revokeObjectURL(url);
   };
 
-  // Handler Share Spesifik per Platform
+  // LOGIKA UTAMA YANG DISEMPURNAKAN
   const handleShareApp = async (platform: string) => {
     const kmlFile = getKmlFile();
+    const textMsg = `Berikut adalah file hasil tagging: ${fileName}`;
+    const fallbackText = encodeURIComponent(textMsg + '\n\n*(Sistem telah mengunduh file ini ke perangkat Anda. Tolong lampirkan/kirim file tersebut ke obrolan ini)*');
 
-    // 1. Jika di Perangkat Mobile (HP) & Mendukung Native Share File
-    if (navigator.canShare && navigator.canShare({ files: [kmlFile] })) {
+    // Deteksi cerdas: Apakah pengguna memakai HP atau Tablet?
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    // ==========================================
+    // JALUR 1: KHUSUS HP (Memunculkan Laci Share)
+    // ==========================================
+    if (isMobile && navigator.canShare && navigator.canShare({ files: [kmlFile] })) {
       try {
         await navigator.share({
           files: [kmlFile],
           title: fileName,
-          text: `Berikut file hasil tagging: ${fileName}`,
+          text: textMsg,
         });
-        return;
-      } catch (err) {
-        console.log('Share dibatalkan');
-        return;
+        return; // Hentikan fungsi jika laci OS berhasil terbuka
+      } catch (err: any) {
+        if (err.name === 'AbortError') return; // Abaikan jika pengguna membatalkan
+        console.error('Share HP gagal:', err);
       }
     }
 
-    // 2. Jika di PC / Desktop (Otomatis Unduh File KML + Buka Aplikasi Tujuan)
-    handleDownloadKml();
+    // ==========================================
+    // JALUR 2: KHUSUS LAPTOP/PC 
+    // (Instan Redirect + Download agar tidak diblokir browser)
+    // ==========================================
+    
+    // 1. Eksekusi Download
+    if (platform !== 'native') {
+       handleDownloadKml();
+    }
 
-    const textMsg = encodeURIComponent(`Berikut adalah file hasil tagging: ${fileName}`);
-
+    // 2. Eksekusi Redirect Tab Baru (Karena langsung dieksekusi, browser TIDAK akan memblokir)
     switch (platform) {
       case 'whatsapp':
-        window.open(`https://web.whatsapp.com/`, '_blank');
+        window.open(`https://wa.me/?text=${fallbackText}`, '_blank');
         break;
       case 'telegram':
-        window.open(`https://web.telegram.org/`, '_blank');
+        window.open(`https://t.me/share/url?url=&text=${fallbackText}`, '_blank');
         break;
       case 'email':
-        window.location.href = `mailto:?subject=${encodeURIComponent(`Hasil Tagging - ${fileName}`)}&body=${textMsg}`;
+        window.location.href = `mailto:?subject=${encodeURIComponent(`Hasil Tagging - ${fileName}`)}&body=${fallbackText}`;
         break;
       case 'drive':
-        window.open(`https://drive.google.com/`, '_blank');
-        break;
       case 'facebook':
-        window.open(`https://www.facebook.com/`, '_blank');
+      case 'native':
+        alert(`File ${fileName} otomatis diunduh.\nSilakan buka aplikasi ${platform} lalu unggah file tersebut secara manual.`);
         break;
       default:
         break;
@@ -131,11 +144,7 @@ export const TaggingShare: React.FC = () => {
       <div className="tagging-share-page">
         <div className="share-card-success">
           <div className="success-icon-wrapper">
-            <img
-              src="/images/check.png"
-              alt="Success Check"
-              className="check-icon-img"
-            />
+            <img src="/images/check.png" alt="Success Check" className="check-icon-img" />
           </div>
 
           <h2 className="success-title">Tagging berhasil diselesaikan!</h2>
@@ -147,13 +156,9 @@ export const TaggingShare: React.FC = () => {
             className="file-info-badge"
             onClick={handleDownloadKml}
             style={{ cursor: 'pointer' }}
-            title="Klik untuk mengunduh file KML"
+            title="Klik untuk mengunduh file KML secara manual"
           >
-            <img
-              src="/images/kml.png"
-              alt="KML File"
-              className="kml-badge-img"
-            />
+            <img src="/images/kml.png" alt="KML File" className="kml-badge-img" />
             <div className="file-info-text">
               <span className="file-name-text">{fileName}</span>
               <span className="file-size-text">Ukuran file: {fileSize}</span>
@@ -163,62 +168,34 @@ export const TaggingShare: React.FC = () => {
           <div className="social-share-section">
             <span className="social-share-label">Dibagikan melalui:</span>
             <div className="social-icons-grid">
-              <div
-                className="social-item"
-                onClick={() => handleShareApp('whatsapp')}
-                style={{ cursor: 'pointer' }}
-              >
+              <div className="social-item" onClick={() => handleShareApp('whatsapp')} style={{ cursor: 'pointer' }}>
                 <img src="/images/whatsapp.png" alt="WhatsApp" className="social-icon-img" />
                 <span>WhatsApp</span>
               </div>
-              <div
-                className="social-item"
-                onClick={() => handleShareApp('telegram')}
-                style={{ cursor: 'pointer' }}
-              >
+              <div className="social-item" onClick={() => handleShareApp('telegram')} style={{ cursor: 'pointer' }}>
                 <img src="/images/telegram.png" alt="Telegram" className="social-icon-img" />
                 <span>Telegram</span>
               </div>
-              <div
-                className="social-item"
-                onClick={() => handleShareApp('email')}
-                style={{ cursor: 'pointer' }}
-              >
+              <div className="social-item" onClick={() => handleShareApp('email')} style={{ cursor: 'pointer' }}>
                 <img src="/images/gmail.png" alt="Email" className="social-icon-img" />
                 <span>Email</span>
               </div>
-              <div
-                className="social-item"
-                onClick={() => handleShareApp('drive')}
-                style={{ cursor: 'pointer' }}
-              >
+              <div className="social-item" onClick={() => handleShareApp('drive')} style={{ cursor: 'pointer' }}>
                 <img src="/images/google-drive.png" alt="Google Drive" className="social-icon-img" />
                 <span>Google Drive</span>
               </div>
-              <div
-                className="social-item"
-                onClick={() => handleShareApp('facebook')}
-                style={{ cursor: 'pointer' }}
-              >
+              <div className="social-item" onClick={() => handleShareApp('facebook')} style={{ cursor: 'pointer' }}>
                 <img src="/images/facebook.png" alt="Facebook" className="social-icon-img" />
                 <span>Facebook</span>
               </div>
-              <div
-                className="social-item"
-                onClick={() => handleShareApp('native')}
-                style={{ cursor: 'pointer' }}
-              >
+              <div className="social-item" onClick={() => handleShareApp('native')} style={{ cursor: 'pointer' }}>
                 <img src="/images/option.png" alt="Lainnya" className="social-icon-img" />
                 <span>Lainnya</span>
               </div>
             </div>
           </div>
 
-          <button
-            type="button"
-            className="btn-kembali-tagging"
-            onClick={handleKembaliKeTagging}
-          >
+          <button type="button" className="btn-kembali-tagging" onClick={handleKembaliKeTagging}>
             Kembali
           </button>
         </div>
