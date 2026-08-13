@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
 import '../../assets/Tagging/OdpForm.css';
 
@@ -9,13 +9,18 @@ interface TiangFormData {
 
 export const TiangForm: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const existingMarkers = location.state?.existingMarkers || [];
+  const isTagging = location.state?.isTagging ?? true;
+
   const [formData, setFormData] = useState<TiangFormData>({
     tipe: '',
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -25,21 +30,53 @@ export const TiangForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Data Tiang Disimpan:", formData);
-    navigate('/tagging');
+    setIsLoadingLocation(true);
+
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const newMarker = {
+            id: Date.now().toString(),
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            type: 'TIANG',
+            label: formData.tipe || 'Tiang Point',
+          };
+
+          setIsLoadingLocation(false);
+
+          navigate('/tagging', {
+            state: {
+              newMarker,
+              existingMarkers,
+              isTagging: true,
+            },
+          });
+        },
+        (error) => {
+          setIsLoadingLocation(false);
+          alert('Gagal mengambil lokasi GPS asli: ' + error.message);
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      setIsLoadingLocation(false);
+      alert('Browser Anda tidak mendukung Geolocation.');
+    }
   };
 
   const handleBatal = () => {
-    navigate('/tagging');
+    navigate('/tagging', {
+      state: { existingMarkers, isTagging },
+    });
   };
 
   return (
     <MainLayout pageTitle="Tagging Tiang" activeMenu="tagging">
       <div className="odp-container">
         <div className="odp-card">
-          {/* Form Body */}
           <form onSubmit={handleSubmit} className="odp-form-body">
-            {/* Field Tipe (Dropdown Tiang Eksisting) */}
+            {/* Field Tipe */}
             <div className="odp-field-group">
               <label htmlFor="tipe">Tipe</label>
               <div className="select-wrapper">
@@ -49,6 +86,7 @@ export const TiangForm: React.FC = () => {
                   value={formData.tipe}
                   onChange={handleChange}
                   className={!formData.tipe ? 'placeholder-selected' : ''}
+                  required
                 >
                   <option value="" disabled hidden>
                     Pilih Tiang Eksisting
@@ -67,11 +105,16 @@ export const TiangForm: React.FC = () => {
                 type="button"
                 className="btn-odp-batal"
                 onClick={handleBatal}
+                disabled={isLoadingLocation}
               >
                 Batal
               </button>
-              <button type="submit" className="btn-odp-simpan">
-                Simpan
+              <button
+                type="submit"
+                className="btn-odp-simpan"
+                disabled={isLoadingLocation}
+              >
+                {isLoadingLocation ? 'Mengambil Lokasi...' : 'Simpan'}
               </button>
             </div>
           </form>

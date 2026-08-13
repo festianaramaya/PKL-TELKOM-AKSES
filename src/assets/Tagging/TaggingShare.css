@@ -1,5 +1,5 @@
-/* Container Utama Transparan */
-.save-tagging-page {
+/* Container Utama Transparan Melayang di Atas Peta */
+.tagging-share-page {
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -12,9 +12,9 @@
 }
 
 /* =========================================================
-   TAMPILAN 1: INPUT NAMA FILE (MELAYANG TANPA CARD PUTIH)
+   TAMPILAN 1: INPUT NAMA FILE (PRESISI FIGMA "Tagging RENAME")
 ========================================================= */
-.save-rename-container {
+.share-rename-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,7 +26,7 @@
   border: none !important;
 }
 
-/* Icon Audit */
+/* Icon Audit Gambar */
 .audit-icon-wrapper {
   margin-bottom: 14px;
 }
@@ -74,7 +74,7 @@
   color: #000000;
 }
 
-/* Input Frame */
+/* Input Frame dengan badge .kml */
 .rename-input-box {
   display: flex;
   align-items: center;
@@ -150,13 +150,13 @@
 }
 
 .check-icon-img {
-  width: 90px;
-  height: 90px;
+  width: 75px;
+  height: 75px;
   object-fit: contain;
 }
 
 .success-title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 800;
   color: #000000;
   margin: 0 0 8px 0;
@@ -172,9 +172,9 @@
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 16px;
-  padding: 12px 24px;
+  padding: 12px 100px;
   display: flex;
-  align-items: center;
+  align-items: left;
   gap: 16px;
   margin-bottom: 32px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -199,7 +199,7 @@
 }
 
 .file-size-text {
-  font-size: 13px;
+  font-size: 14px;
   color: #888888;
 }
 
@@ -213,14 +213,14 @@
 }
 
 .social-share-label {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   color: #000000;
 }
 
 .social-icons-grid {
   display: flex;
-  gap: 20px;
+  gap: 40px;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -234,8 +234,8 @@
 }
 
 .social-icon-img {
-  width: 68px;
-  height: 68px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
   transition: transform 0.15s ease;
 }
@@ -267,3 +267,4 @@
   background: #222222;
   transform: translateY(-2px);
 }
+

@@ -1,127 +1,74 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
-import '../../assets/Tagging/OdpForm.css';
+import '../../assets/Tagging/SaveTagging.css';
 
-interface KeteranganFormData {
-  fileName: string;
-  category: string;
-}
-
-export const KeteranganTaggingForm: React.FC = () => {
+export const SaveTagging: React.FC = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<KeteranganFormData>({
-    fileName: '',
-    category: '',
-  });
+  const [fileName, setFileName] = useState<string>('');
+  const [error, setError] = useState<boolean>(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleLanjutkan = (e: React.FormEvent) => {
     e.preventDefault();
+    let cleanedName = fileName.trim();
 
-    // Pastikan nama file diakhiri dengan .kml jika user lupa mengetiknya
-    let finalFileName = formData.fileName.trim();
-    if (finalFileName && !finalFileName.toLowerCase().endsWith('.kml')) {
-      finalFileName += '.kml';
+    if (!cleanedName) {
+      setError(true);
+      return;
     }
 
-    console.log("Data Disimpan:", {
-      ...formData,
-      fileName: finalFileName,
-    });
+    if (!cleanedName.toLowerCase().endsWith('.kml')) {
+      cleanedName += '.kml';
+    }
 
-    // Kembali ke peta tagging setelah menyimpan
-    navigate('/tagging');
-  };
-
-  const handleBatal = () => {
-    navigate('/tagging');
+    // Pindah ke halaman TaggingShare sambil membawa nama file
+    navigate('/tagging/share', { state: { fileName: cleanedName } });
   };
 
   return (
-    <MainLayout pageTitle="Simpan hasil Tagging" activeMenu="tagging">
-      <div className="odp-container">
-        <div className="odp-card">
-          {/* Header Banner */}
-          <div className="odp-header-banner">
-            <div className="odp-icon-box">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
-            </div>
-            <span className="odp-header-title">INPUT NAMA FILE AKHIR (.KML)</span>
+    <MainLayout pageTitle="Tagging Save" activeMenu="tagging">
+      <div className="save-tagging-page">
+        <div className="share-rename-container">
+          <div className="audit-icon-wrapper">
+            <img
+              src="/images/audit.png"
+              alt="Audit Icon"
+              className="audit-icon-img"
+            />
           </div>
 
-          {/* Form Body */}
-          <form onSubmit={handleSubmit} className="odp-form-body">
-            {/* Field Input Nama File */}
-            <div className="odp-field-group">
-              <label htmlFor="fileName">INPUT NAMA FILE AKHIR (.KML)</label>
-              <input
-                type="text"
-                id="fileName"
-                name="fileName"
-                placeholder="nama_file.kml"
-                value={formData.fileName}
-                onChange={handleChange}
-                required
-              />
-            </div>
+          <h2 className="rename-title">Simpan hasil tagging Anda</h2>
+          <p className="rename-subtitle">
+            Masukkan nama file sebelum melanjutkan untuk membagikan hasil tagging.
+          </p>
 
-            {/* Field Category
-            <div className="odp-field-group">
-              <label htmlFor="category">PILIH CATEGORY</label>
-              <div className="select-wrapper">
-                <select
-                  id="category"
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className={!formData.category ? 'placeholder-selected' : ''}
-                  required
-                >
-                  <option value="" disabled hidden>
-                    PILIH CATEGORY
-                  </option>
-                  <option value="Survey">Survey</option>
-                  <option value="Pengukuran">Pengukuran</option>
-                  <option value="Validasi Field">Validasi Field</option>
-                  <option value="Lainnya">Lainnya</option>
-                </select>
-                <span className="custom-arrow">▼</span>
+          <form onSubmit={handleLanjutkan} className="rename-form">
+            <div className="rename-field-group">
+              <label htmlFor="fileName" className="rename-label">
+                Nama file <span style={{ color: '#ef4444' }}>*</span>
+              </label>
+              <div className={`rename-input-box ${error ? 'input-error' : ''}`}>
+                <input
+                  type="text"
+                  id="fileName"
+                  placeholder="Contoh: Tagging_ODC_20260811"
+                  value={fileName}
+                  onChange={(e) => {
+                    setFileName(e.target.value);
+                    if (e.target.value.trim()) setError(false);
+                  }}
+                  autoFocus
+                />
+                <div className="kml-badge-suffix">.kml</div>
               </div>
-            </div> */}
-
-            {/* Form Actions */}
-            <div className="odp-button-group">
-              <button
-                type="button"
-                className="btn-odp-batal"
-                onClick={handleBatal}
-              >
-                Batal
-              </button>
-              <button type="submit" className="btn-odp-simpan">
-                Simpan
-              </button>
+              {error && (
+                <span className="error-text">Nama file wajib diisi terlebih dahulu!</span>
+              )}
             </div>
+
+            <button type="submit" className="btn-lanjutkan-figma">
+              Lanjutkan
+            </button>
           </form>
         </div>
       </div>
@@ -129,4 +76,4 @@ export const KeteranganTaggingForm: React.FC = () => {
   );
 };
 
-export default KeteranganTaggingForm;
+export default SaveTagging;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
 import '../../assets/Tagging/OdpForm.css';
 
@@ -10,10 +10,17 @@ interface HomepassFormData {
 
 export const HomepassForm: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const existingMarkers = location.state?.existingMarkers || [];
+  const isTagging = location.state?.isTagging ?? true;
+
   const [formData, setFormData] = useState<HomepassFormData>({
     noRumah: '',
     keterangan: '',
   });
+
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -25,20 +32,52 @@ export const HomepassForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Data Homepass Disimpan:", formData);
-    navigate('/tagging');
+    setIsLoadingLocation(true);
+
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const newMarker = {
+            id: Date.now().toString(),
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            type: 'HOMEPASS',
+            label: formData.noRumah ? `No. ${formData.noRumah}` : 'Homepass Point',
+            keterangan: formData.keterangan,
+          };
+
+          setIsLoadingLocation(false);
+
+          navigate('/tagging', {
+            state: {
+              newMarker,
+              existingMarkers,
+              isTagging: true,
+            },
+          });
+        },
+        (error) => {
+          setIsLoadingLocation(false);
+          alert('Gagal mengambil lokasi GPS asli: ' + error.message);
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      setIsLoadingLocation(false);
+      alert('Browser Anda tidak mendukung Geolocation.');
+    }
   };
 
   const handleBatal = () => {
-    navigate('/tagging');
+    navigate('/tagging', {
+      state: { existingMarkers, isTagging },
+    });
   };
 
   return (
     <MainLayout pageTitle="Tagging Homepass" activeMenu="tagging">
       <div className="odp-container">
         <div className="odp-card">
-
-          {/* Form Body */}
           <form onSubmit={handleSubmit} className="odp-form-body">
             {/* Field No Rumah */}
             <div className="odp-field-group">
@@ -50,6 +89,7 @@ export const HomepassForm: React.FC = () => {
                 placeholder="Text"
                 value={formData.noRumah}
                 onChange={handleChange}
+                required
               />
             </div>
 
@@ -72,11 +112,16 @@ export const HomepassForm: React.FC = () => {
                 type="button"
                 className="btn-odp-batal"
                 onClick={handleBatal}
+                disabled={isLoadingLocation}
               >
                 Batal
               </button>
-              <button type="submit" className="btn-odp-simpan">
-                Simpan
+              <button
+                type="submit"
+                className="btn-odp-simpan"
+                disabled={isLoadingLocation}
+              >
+                {isLoadingLocation ? 'Mengambil Lokasi...' : 'Simpan'}
               </button>
             </div>
           </form>

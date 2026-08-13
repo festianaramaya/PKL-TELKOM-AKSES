@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
-import '../../assets/Tagging/OdpForm.css'; // Menggunakan CSS yang sama agar style konsisten
+import '../../assets/Tagging/OdpForm.css';
 
 interface OdcFormData {
   label: string;
@@ -11,11 +11,18 @@ interface OdcFormData {
 
 export const OdcForm: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const existingMarkers = location.state?.existingMarkers || [];
+  const isTagging = location.state?.isTagging ?? true;
+
   const [formData, setFormData] = useState<OdcFormData>({
     label: '',
     tipe: '',
     keterangan: '',
   });
+
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -29,21 +36,52 @@ export const OdcForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Data ODC Disimpan:", formData);
-    // Redirect kembali ke halaman peta tagging
-    navigate('/tagging');
+    setIsLoadingLocation(true);
+
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const newMarker = {
+            id: Date.now().toString(),
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            type: 'ODC',
+            label: formData.label || 'ODC Point',
+            keterangan: formData.keterangan,
+          };
+
+          setIsLoadingLocation(false);
+
+          navigate('/tagging', {
+            state: {
+              newMarker,
+              existingMarkers,
+              isTagging: true,
+            },
+          });
+        },
+        (error) => {
+          setIsLoadingLocation(false);
+          alert('Gagal mengambil lokasi GPS asli: ' + error.message);
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      setIsLoadingLocation(false);
+      alert('Browser Anda tidak mendukung Geolocation.');
+    }
   };
 
   const handleBatal = () => {
-    navigate('/tagging');
+    navigate('/tagging', {
+      state: { existingMarkers, isTagging },
+    });
   };
 
   return (
     <MainLayout pageTitle="Tagging ODC" activeMenu="tagging">
       <div className="odp-container">
         <div className="odp-card">
-
-          {/* Form Body */}
           <form onSubmit={handleSubmit} className="odp-form-body">
             {/* Field Label */}
             <div className="odp-field-group">
@@ -55,10 +93,11 @@ export const OdcForm: React.FC = () => {
                 placeholder="Text"
                 value={formData.label}
                 onChange={handleChange}
+                required
               />
             </div>
 
-            {/* Field Tipe (Dropdown ODC) */}
+            {/* Field Tipe */}
             <div className="odp-field-group">
               <label htmlFor="tipe">Tipe</label>
               <div className="select-wrapper">
@@ -68,6 +107,7 @@ export const OdcForm: React.FC = () => {
                   value={formData.tipe}
                   onChange={handleChange}
                   className={!formData.tipe ? 'placeholder-selected' : ''}
+                  required
                 >
                   <option value="" disabled hidden>
                     Pilih ODC
@@ -100,11 +140,16 @@ export const OdcForm: React.FC = () => {
                 type="button"
                 className="btn-odp-batal"
                 onClick={handleBatal}
+                disabled={isLoadingLocation}
               >
                 Batal
               </button>
-              <button type="submit" className="btn-odp-simpan">
-                Simpan
+              <button
+                type="submit"
+                className="btn-odp-simpan"
+                disabled={isLoadingLocation}
+              >
+                {isLoadingLocation ? 'Mengambil Lokasi...' : 'Simpan'}
               </button>
             </div>
           </form>

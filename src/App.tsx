@@ -26,6 +26,8 @@ import OdcForm from "./pages/Tagging/OdcForm";
 import TiangForm from "./pages/Tagging/TiangForm";
 import HomepassForm from "./pages/Tagging/HomepassForm";
 import KeteranganTaggingForm from "./pages/Tagging/SaveTagging";
+import SaveTagging from "./pages/Tagging/SaveTagging";
+import TaggingShare from "./pages/Tagging/TaggingShare";
 
 // Placeholder yang tetap memiliki Sidebar & Header
 function UnderDevelopment({ title, activeMenu }: { title: string; activeMenu: string }) {
@@ -73,15 +75,16 @@ export default function App() {
           <Route path="point-in-polygon" element={<PointInPolygon />} />
           <Route path="polygon-in-polygon" element={<PolygonInPolygon />} />
           <Route path="/csv-to-kml" element={<CsvToKmlConverter />} />
-          <Route path="/tagging" element={<TaggingMaps />} />
-          
-                  
+          <Route path="/tagging" element={<TaggingMaps />} />                 
           {/* === RUTE SUB-HALAMAN TAGGING === */}
           <Route path="/tagging/odp" element={<OdpForm />} />
           <Route path="/tagging/odc" element={<OdcForm />} />
           <Route path="/tagging/tiang" element={<TiangForm />} />
           <Route path="/tagging/homepass" element={<HomepassForm />} />
           <Route path="/tagging/keterangan" element={<KeteranganTaggingForm />} />
+          <Route path="/tagging/save" element={<SaveTagging />} />
+          <Route path="/tagging/share" element={<TaggingShare />} />
+          
 
           {/* Fitur-Fitur Placeholder (Tetap menggunakan Layout) */}
           <Route path="/create-lop" element={<UnderDevelopment title="Create LOP" activeMenu="create-lop" />} />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
 import '../../assets/Tagging/OdpForm.css';
 
@@ -11,11 +11,18 @@ interface OdpFormData {
 
 export const OdpForm: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const existingMarkers = location.state?.existingMarkers || [];
+  const isTagging = location.state?.isTagging ?? true;
+
   const [formData, setFormData] = useState<OdpFormData>({
     label: '',
     tipe: '',
     keterangan: '',
   });
+
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -29,24 +36,54 @@ export const OdpForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simpan data logika dapat dimasukkan di sini
-    console.log("Data ODP Disimpan:", formData);
-    
-    // Redirect kembali ke halaman utama tagging
-    navigate('/tagging');
+    setIsLoadingLocation(true);
+
+    // Ambil koordinat GPS perangkat lokasi asli pengguna
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const newMarker = {
+            id: Date.now().toString(),
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            type: 'ODP',
+            label: formData.label || 'ODP Point',
+            keterangan: formData.keterangan,
+          };
+
+          setIsLoadingLocation(false);
+
+          // Pindah kembali ke peta membawa marker lokasi asli
+          navigate('/tagging', {
+            state: {
+              newMarker,
+              existingMarkers,
+              isTagging: true,
+            },
+          });
+        },
+        (error) => {
+          setIsLoadingLocation(false);
+          alert('Gagal mengambil lokasi GPS asli: ' + error.message);
+        },
+        { enableHighAccuracy: true } // Presisi lokasi tinggi
+      );
+    } else {
+      setIsLoadingLocation(false);
+      alert('Browser Anda tidak mendukung Geolocation.');
+    }
   };
 
   const handleBatal = () => {
-    navigate('/tagging');
+    navigate('/tagging', {
+      state: { existingMarkers, isTagging },
+    });
   };
 
   return (
     <MainLayout pageTitle="Tagging ODP" activeMenu="tagging">
       <div className="odp-container">
         <div className="odp-card">
-          {/* Header Banner */}
-          
-          {/* Form Body */}
           <form onSubmit={handleSubmit} className="odp-form-body">
             {/* Field Label */}
             <div className="odp-field-group">
@@ -58,10 +95,11 @@ export const OdpForm: React.FC = () => {
                 placeholder="Text"
                 value={formData.label}
                 onChange={handleChange}
+                required
               />
             </div>
 
-            {/* Field Tipe (Dropdown) */}
+            {/* Field Tipe */}
             <div className="odp-field-group">
               <label htmlFor="tipe">Tipe</label>
               <div className="select-wrapper">
@@ -71,6 +109,7 @@ export const OdpForm: React.FC = () => {
                   value={formData.tipe}
                   onChange={handleChange}
                   className={!formData.tipe ? 'placeholder-selected' : ''}
+                  required
                 >
                   <option value="" disabled hidden>
                     Pilih ODP
@@ -104,11 +143,16 @@ export const OdpForm: React.FC = () => {
                 type="button"
                 className="btn-odp-batal"
                 onClick={handleBatal}
+                disabled={isLoadingLocation}
               >
                 Batal
               </button>
-              <button type="submit" className="btn-odp-simpan">
-                Simpan
+              <button 
+                type="submit" 
+                className="btn-odp-simpan"
+                disabled={isLoadingLocation}
+              >
+                {isLoadingLocation ? 'Mengambil Lokasi...' : 'Simpan'}
               </button>
             </div>
           </form>
