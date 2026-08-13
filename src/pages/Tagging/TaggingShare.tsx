@@ -29,23 +29,66 @@ export const TaggingShare: React.FC = () => {
   const markers = state?.markers || [];
 
   const getKmlFile = (): File => {
+    // Definisi Style Icon bawaan Google Maps/Earth
+    const kmlStyles = `
+      <Style id="icon-tiang">
+        <IconStyle>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href>
+          </Icon>
+        </IconStyle>
+      </Style>
+      <Style id="icon-odp">
+        <IconStyle>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/shapes/placemark_square.png</href>
+          </Icon>
+          <color>ff0000ff</color> <!-- Warna Merah -->
+        </IconStyle>
+      </Style>
+      <Style id="icon-odc">
+        <IconStyle>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/shapes/caution.png</href>
+          </Icon>
+          <color>ff0000ff</color> <!-- Segitiga Merah -->
+        </IconStyle>
+      </Style>
+      <Style id="icon-homepass">
+        <IconStyle>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/shapes/homegardenbusiness.png</href>
+          </Icon>
+        </IconStyle>
+      </Style>
+    `;
+
     const placemarksXml = markers
-      .map(
-        (p) => `
+      .map((p) => {
+        let styleId = 'icon-tiang';
+        const currentType = p.type.toUpperCase();
+        
+        if (currentType === 'ODP') styleId = 'icon-odp';
+        else if (currentType === 'ODC') styleId = 'icon-odc';
+        else if (currentType === 'HOMEPASS') styleId = 'icon-homepass';
+
+        return `
     <Placemark>
       <name>${p.label || p.type}</name>
+      <styleUrl>#${styleId}</styleUrl>
       <description>Tipe: ${p.type}${p.keterangan ? ' - Ket: ' + p.keterangan : ''}</description>
       <Point>
         <coordinates>${p.lng},${p.lat},0</coordinates>
       </Point>
-    </Placemark>`
-      )
+    </Placemark>`;
+      })
       .join('');
 
     const kmlContent = `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
     <name>${fileName}</name>
+    ${kmlStyles}
     ${placemarksXml}
   </Document>
 </kml>`;
@@ -73,18 +116,13 @@ export const TaggingShare: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
-  // LOGIKA UTAMA YANG DISEMPURNAKAN
   const handleShareApp = async (platform: string) => {
     const kmlFile = getKmlFile();
     const textMsg = `Berikut adalah file hasil tagging: ${fileName}`;
     const fallbackText = encodeURIComponent(textMsg + '\n\n*(Sistem telah mengunduh file ini ke perangkat Anda. Tolong lampirkan/kirim file tersebut ke obrolan ini)*');
 
-    // Deteksi cerdas: Apakah pengguna memakai HP atau Tablet?
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-    // ==========================================
-    // JALUR 1: KHUSUS HP (Memunculkan Laci Share)
-    // ==========================================
     if (isMobile && navigator.canShare && navigator.canShare({ files: [kmlFile] })) {
       try {
         await navigator.share({
@@ -92,24 +130,17 @@ export const TaggingShare: React.FC = () => {
           title: fileName,
           text: textMsg,
         });
-        return; // Hentikan fungsi jika laci OS berhasil terbuka
+        return; 
       } catch (err: any) {
-        if (err.name === 'AbortError') return; // Abaikan jika pengguna membatalkan
+        if (err.name === 'AbortError') return; 
         console.error('Share HP gagal:', err);
       }
     }
 
-    // ==========================================
-    // JALUR 2: KHUSUS LAPTOP/PC 
-    // (Instan Redirect + Download agar tidak diblokir browser)
-    // ==========================================
-    
-    // 1. Eksekusi Download
     if (platform !== 'native') {
        handleDownloadKml();
     }
 
-    // 2. Eksekusi Redirect Tab Baru (Karena langsung dieksekusi, browser TIDAK akan memblokir)
     switch (platform) {
       case 'whatsapp':
         window.open(`https://wa.me/?text=${fallbackText}`, '_blank');
