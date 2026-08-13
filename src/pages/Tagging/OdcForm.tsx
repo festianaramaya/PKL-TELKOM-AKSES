@@ -115,7 +115,10 @@ export const OdcForm: React.FC = () => {
                   <option value="ODC-C 288">ODC-C 288</option>
                   <option value="ODC-C 144">ODC-C 144</option>
                   <option value="ODC-B 48">ODC-B 48</option>
+                  <option value="ODC Horison">ODC Horison</option>
                   <option value="Mini OLT">Mini OLT</option>
+                  <option value="Mini OLT + ODC">Mini OLT + ODC</option>
+
                 </select>
                 <span className="custom-arrow">▼</span>
               </div>

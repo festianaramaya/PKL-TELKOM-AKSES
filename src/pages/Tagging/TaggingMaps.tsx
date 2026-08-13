@@ -163,6 +163,12 @@ const TaggingMaps: React.FC = () => {
 
   // HANDLER STOP
   const handleStop = () => {
+    // Validasi pencegahan jika belum START
+    if (!isTagging) {
+      alert("Silakan klik tombol START terlebih dahulu sebelum menyelesaikan tagging!");
+      return;
+    }
+
     setIsTagging(false);
 
     const totalPoints = markers.length;
@@ -226,8 +232,13 @@ const TaggingMaps: React.FC = () => {
 
           <button
             type="button"
-            className="tagging-button stop-button"
+            className={`tagging-button stop-button ${!isTagging ? "button-disabled" : ""}`}
             onClick={handleStop}
+            disabled={!isTagging}
+            style={{
+              opacity: isTagging ? 1 : 0.5,
+              cursor: isTagging ? "pointer" : "not-allowed"
+            }}
           >
             <span className="button-icon stop-icon">□</span>
             STOP
