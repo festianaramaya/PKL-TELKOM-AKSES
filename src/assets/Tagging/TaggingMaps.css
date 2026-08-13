@@ -5,16 +5,12 @@
 .tagging-page {
   width: 100%;
   box-sizing: border-box;
-
   padding: 0 24px 35px 24px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   overflow-x: hidden;
 }
-
 
 /* =========================================================
    MAP
@@ -22,35 +18,21 @@
 
 .tagging-map-section {
   position: relative;
-
   width: 100%;
   max-width: 1100px;
-
   margin: 0 auto;
-
   background: #ffffff;
-
   border-radius: 12px;
-
   overflow: hidden;
-
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
-
-
-/* MAP ASLI */
 
 .tagging-real-map {
   width: 100%;
-
   height: 480px;
-
   min-height: 480px;
-
   background: #eeeeee;
 }
-
 
 /* =========================================================
    STATUS TAGGING
@@ -58,46 +40,29 @@
 
 .tagging-status {
   position: absolute;
-
   top: 18px;
   right: 18px;
-
   z-index: 1000;
-
   display: flex;
   align-items: center;
   gap: 8px;
-
   padding: 9px 16px;
-
   background: rgba(255, 255, 255, 0.95);
-
   border-radius: 20px;
-
   font-family: "Inter", sans-serif;
-
   font-size: 13px;
-
   font-weight: 600;
-
   color: #111827;
-
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
-
 
 .status-dot {
   width: 9px;
   height: 9px;
-
   background: #22c55e;
-
   border-radius: 50%;
-
   display: inline-block;
 }
-
 
 /* =========================================================
    BUTTON
@@ -105,113 +70,70 @@
 
 .tagging-controls {
   width: 100%;
-
   max-width: 1100px;
-
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   gap: 32px;
-
   margin-top: 24px;
-
   margin-bottom: 20px;
 }
 
-
 .tagging-button {
   min-width: 150px;
-
   height: 54px;
-
   border: none;
-
   border-radius: 14px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   gap: 10px;
-
   font-family: "Inter", sans-serif;
-
   font-size: 15px;
-
   font-weight: 700;
-
   cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
-
 
 .tagging-button:hover {
   transform: translateY(-2px);
 }
 
-
 .tagging-button:active {
   transform: translateY(0);
 }
 
-
-/* START */
-
 .start-button {
   background: #000000;
-
   color: #ffffff;
-
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
 }
-
 
 .start-button:hover {
   background: #1f1f1f;
 }
 
-
 .start-button.button-active {
   background: #ed1e28;
 }
 
-
-/* STOP */
-
 .stop-button {
   background: #eeeeF3;
-
   color: #111111;
-
-  box-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
-
 
 .stop-button:hover {
   background: #e0e0e7;
 }
 
-
 .button-icon {
   font-size: 17px;
 }
 
-
 .stop-icon {
   font-size: 18px;
 }
-
 
 /* =========================================================
    LEGEND
@@ -219,259 +141,249 @@
 
 .tagging-legend {
   width: 100%;
-
   max-width: 680px;
-
   display: flex;
-
   flex-direction: column;
-
   gap: 14px;
-
   margin: 0 auto;
 }
 
-
 .legend-card {
   width: 100%;
-
   min-height: 64px;
-
   box-sizing: border-box;
-
   display: flex;
-
   align-items: center;
-
   background: rgba(245, 245, 245, 0.92);
-
   border-radius: 16px;
-
   overflow: hidden;
-
-  box-shadow:
-    0 2px 7px rgba(0, 0, 0, 0.12);
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-
 
 .legend-card:hover {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 6px 14px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
 }
-
-
-/* =========================================================
-   LEGEND ICON
-========================================================= */
 
 .legend-icon {
   width: 80px;
-
   height: 64px;
-
   flex-shrink: 0;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  font-size: 28px;
-
-  color: #111111;
-
   background: rgba(255, 255, 255, 0.85);
-
   border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-
 .legend-text {
   display: flex;
-
   align-items: center;
-
   padding-left: 20px;
-
   font-family: "Inter", sans-serif;
 }
-
 
 .legend-text strong {
   font-size: 16px;
-
   font-weight: 700;
-
   color: #111111;
 }
 
-
-/* Sembunyikan teks deskripsi kecil jika masih ada di TSX */
-.legend-text small {
-  display: none;
-}
-
-
 /* =========================================================
-   LEAFLET MARKER
+   GEOMETRI IKON HITAM PUTIH (LEAFLET & LEGEND)
 ========================================================= */
 
-.custom-map-marker {
-  background: transparent;
-
-  border: none;
+.leaflet-tracking-marker-container {
+  background: transparent !important;
+  border: none !important;
 }
 
-
-.map-marker {
-  width: 42px;
-
-  height: 42px;
-
-  border-radius: 50%;
-
+.figma-tracking-pin {
   display: flex;
-
   align-items: center;
+  position: relative;
+}
 
+.shape-container {
+  display: flex;
+  align-items: center;
   justify-content: center;
+  width: 24px;
+  height: 24px;
+}
 
+/* 1. TIANG: Lingkaran Putih dengan Titik Hitam Tengah */
+.icon-tiang-geom {
+  width: 14px;
+  height: 14px;
   background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+.icon-tiang-geom::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 4px;
+  height: 4px;
+  background: #000000;
+  border-radius: 50%;
+}
 
-  border: 3px solid #111111;
+/* 2. ODP: Kotak Hitam Putih dengan Titik Hitam di Dalam */
+.icon-odp-geom {
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+.icon-odp-geom .inner-dot {
+  width: 4px;
+  height: 4px;
+  background: #000000;
+  border-radius: 50%;
+}
 
-  box-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.35);
+/* 3. ODC: Segitiga Berlubang Ber-outline Hitam */
+.icon-odc-geom {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid #000000;
+  position: relative;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+.icon-odc-geom::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: -5px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 9px solid #ffffff;
+}
 
-  font-family: "Inter", sans-serif;
+/* 4. HOMEPASS: Bentuk Rumah Outline Hitam Putih */
+.icon-homepass-geom {
+  position: relative;
+  width: 14px;
+  height: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+}
+.icon-homepass-geom .roof {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 7px solid #000000;
+}
+.icon-homepass-geom .base {
+  width: 10px;
+  height: 7px;
+  background: #ffffff;
+  border-left: 2px solid #000000;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+}
 
-  font-size: 8px;
-
+/* Badge Kapsul Start / Stop & Label */
+.badge-capsule {
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 10px;
   font-weight: 800;
-
-  color: #111111;
+  padding: 3px 10px;
+  border-radius: 12px;
+  position: absolute;
+  top: -24px;
+  left: -8px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-
-.odp-marker {
-  border-color: #ef4444;
+.stop-capsule {
+  background: #000000;
 }
 
-
-.odc-marker {
-  border-color: #2563eb;
+.label-capsule {
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-left: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
-
-
-.tiang-marker {
-  border-color: #16a34a;
-}
-
-
-.homepass-marker {
-  border-color: #9333ea;
-}
-
-
-/* =========================================================
-   LEAFLET CUSTOMIZATION
-========================================================= */
-
-.tagging-real-map .leaflet-control-zoom {
-  margin-left: 15px;
-
-  margin-top: 15px;
-}
-
-
-.tagging-real-map .leaflet-control-zoom a {
-  width: 34px;
-
-  height: 34px;
-
-  line-height: 34px;
-
-  font-size: 18px;
-}
-
-
-.tagging-real-map .leaflet-control-attribution {
-  font-size: 9px;
-}
-
 
 /* =========================================================
    RESPONSIVE
 ========================================================= */
 
 @media (max-width: 1200px) {
-
   .tagging-page {
     padding-left: 18px;
     padding-right: 18px;
   }
-
   .tagging-real-map {
     height: 430px;
     min-height: 430px;
   }
-
 }
 
-
 @media (max-width: 768px) {
-
   .tagging-page {
     padding: 0 12px 25px 12px;
   }
-
   .tagging-real-map {
     height: 360px;
     min-height: 360px;
   }
-
   .tagging-controls {
     gap: 15px;
     margin-top: 18px;
   }
-
   .tagging-button {
     min-width: 125px;
     height: 48px;
     font-size: 13px;
   }
-
   .tagging-legend {
     max-width: 100%;
   }
-
 }
 
-
 @media (max-width: 480px) {
-
   .tagging-real-map {
     height: 300px;
     min-height: 300px;
   }
-
   .tagging-controls {
     gap: 10px;
   }
-
   .tagging-button {
     min-width: 110px;
   }
-
   .legend-icon {
     width: 65px;
   }
-
 }

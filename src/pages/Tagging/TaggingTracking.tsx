@@ -19,14 +19,12 @@ export const TaggingTracking: React.FC = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const leafletMapRef = useRef<L.Map | null>(null);
 
-  // Menerima data marker DINAMIS dari hasil tagging pengguna
   const markers: TaggingMarkerData[] = location.state?.markers || [];
 
   useEffect(() => {
     if (!mapRef.current) return;
     if (leafletMapRef.current) return;
 
-    // Koordinat pusat peta (default ke Surabaya jika marker kosong)
     const defaultCenter: L.LatLngTuple =
       markers.length > 0 ? [markers[0].lat, markers[0].lng] : [-7.3228, 112.7688];
 
@@ -44,7 +42,6 @@ export const TaggingTracking: React.FC = () => {
     }).addTo(map);
 
     if (markers.length > 0) {
-      // 1. Gambar Garis Rute (Polyline) Menghubungkan Titik-Titik Hasil Tagging Asli
       const polylineCoords: L.LatLngTuple[] = markers.map((m) => [m.lat, m.lng]);
 
       L.polyline(polylineCoords, {
@@ -53,27 +50,32 @@ export const TaggingTracking: React.FC = () => {
         opacity: 0.9,
       }).addTo(map);
 
-      // 2. Render Custom Pin Kapsul untuk Setiap Titik Hasil Tagging
       markers.forEach((item, index) => {
         const isStart = index === 0;
         const isStop = index === markers.length - 1;
+        const currentType = item.type.toUpperCase();
 
-        let iconSymbol = "⚪";
-        if (item.type === "ODP") iconSymbol = "🗄️";
-        if (item.type === "ODC") iconSymbol = "📦";
-        if (item.type === "HOMEPASS") iconSymbol = "🏠";
+        // Render bentuk ikon persis seperti referensi Google Earth tapi versi hitam putih
+        let shapeHtml = '<div class="icon-tiang-geom"></div>';
+        
+        if (currentType === "ODP") {
+          shapeHtml = '<div class="icon-odp-geom"><div class="inner-dot"></div></div>';
+        } else if (currentType === "ODC") {
+          shapeHtml = '<div class="icon-odc-geom"></div>';
+        } else if (currentType === "HOMEPASS") {
+          shapeHtml = '<div class="icon-homepass-geom"><div class="roof"></div><div class="base"></div></div>';
+        }
 
-        // SELALU TAMPILKAN LABEL TIPE (ODP/ODC/Tiang/Homepass)
-        // Dan tambahkan badge START/STOP di atas kapsulnya
         const pinHtml = `
           <div class="figma-tracking-pin">
             ${isStart ? '<div class="badge-capsule start-capsule">START</div>' : ""}
             ${isStop ? '<div class="badge-capsule stop-capsule">STOP</div>' : ""}
             
-            <div class="node-circle"></div>
+            <div class="shape-container">
+              ${shapeHtml}
+            </div>
             
             <div class="label-capsule">
-              <span class="icon-span">${iconSymbol}</span>
               <span>${item.label || item.type}</span>
             </div>
           </div>
@@ -82,14 +84,13 @@ export const TaggingTracking: React.FC = () => {
         const customIcon = L.divIcon({
           className: "leaflet-tracking-marker-container",
           html: pinHtml,
-          iconSize: [120, 40],
-          iconAnchor: [15, 20],
+          iconSize: [140, 40],
+          iconAnchor: [20, 20],
         });
 
         L.marker([item.lat, item.lng], { icon: customIcon }).addTo(map);
       });
 
-      // Fokuskan Peta Otomatis Membungkus Seluruh Titik Tagging Pengguna
       const bounds = L.latLngBounds(polylineCoords);
       map.fitBounds(bounds, { padding: [50, 50] });
     }
@@ -107,32 +108,30 @@ export const TaggingTracking: React.FC = () => {
   return (
     <MainLayout pageTitle="Tagging TRACKING" activeMenu="tagging">
       <div className="tracking-page-container">
-        {/* MAP CONTAINER DENGAN OVERLAY LEGEND */}
         <div className="tracking-map-card">
           <div ref={mapRef} className="tracking-leaflet-map" />
 
-          {/* Legend Melayang di Kiri Bawah */}
+          {/* Legend Hitam Putih dengan Bentuk Presisi */}
           <div className="figma-map-legend">
             <div className="legend-row">
-              <span className="legend-dot">⚪</span>
+              <div className="legend-icon-box"><div className="icon-tiang-geom" style={{transform: 'scale(0.8)'}}></div></div>
               <span>TIANG</span>
             </div>
             <div className="legend-row">
-              <span className="legend-dot">🗄️</span>
+              <div className="legend-icon-box"><div className="icon-odp-geom" style={{transform: 'scale(0.8)'}}><div className="inner-dot"></div></div></div>
               <span>ODP</span>
             </div>
             <div className="legend-row">
-              <span className="legend-dot">📦</span>
+              <div className="legend-icon-box"><div className="icon-odc-geom" style={{transform: 'scale(0.6)'}}></div></div>
               <span>ODC</span>
             </div>
             <div className="legend-row">
-              <span className="legend-dot">🏠</span>
+              <div className="legend-icon-box"><div className="icon-homepass-geom" style={{transform: 'scale(0.7)'}}><div class="roof"></div><div class="base"></div></div></div>
               <span>HOMEPASS</span>
             </div>
           </div>
         </div>
 
-        {/* CONTROLS BAR */}
         <div className="tracking-bottom-controls">
           <button
             type="button"

@@ -21,7 +21,6 @@ const TaggingMaps: React.FC = () => {
   const leafletMapRef = useRef<L.Map | null>(null);
   const layerGroupRef = useRef<L.LayerGroup | null>(null);
 
-  // Ambil marker lama & status tagging dari state navigasi
   const initialMarkers: TaggingMarkerData[] =
     location.state?.markers || location.state?.existingMarkers || [];
   const initialIsTagging: boolean = location.state?.isTagging ?? false;
@@ -29,9 +28,7 @@ const TaggingMaps: React.FC = () => {
   const [isTagging, setIsTagging] = useState<boolean>(initialIsTagging);
   const [markers, setMarkers] = useState<TaggingMarkerData[]>(initialMarkers);
 
-  // 1. MENERIMA MARKER DARI FORM / DARI HALAMAN SHARE
   useEffect(() => {
-    // Jika kembali dari Form Input
     if (location.state?.newMarker) {
       const newMarker = location.state.newMarker as TaggingMarkerData;
 
@@ -43,15 +40,13 @@ const TaggingMaps: React.FC = () => {
       setIsTagging(true);
       window.history.replaceState({}, document.title);
     } 
-    // Jika kembali dari Halaman Share (Membawa markers hasil tracking)
     else if (location.state?.markers) {
       setMarkers(location.state.markers);
-      setIsTagging(false); // Mode tracking selesai
+      setIsTagging(false);
       window.history.replaceState({}, document.title);
     }
   }, [location.state]);
 
-  // 2. INISIALISASI PETA LEAFLET
   useEffect(() => {
     if (!mapRef.current) return;
 
@@ -86,7 +81,6 @@ const TaggingMaps: React.FC = () => {
     };
   }, []);
 
-  // 3. RENDER MARKER & GARIS ROUTE (TRACKING)
   useEffect(() => {
     const layerGroup = layerGroupRef.current;
     const map = leafletMapRef.current;
@@ -95,7 +89,6 @@ const TaggingMaps: React.FC = () => {
     layerGroup.clearLayers();
 
     if (markers.length > 0) {
-      // (A) Gambar Garis Rute (Polyline) jika tagging sudah di-STOP / Selesai
       if (!isTagging && markers.length > 1) {
         const polylineCoords: L.LatLngTuple[] = markers.map((m) => [m.lat, m.lng]);
         const polyline = L.polyline(polylineCoords, {
@@ -106,26 +99,32 @@ const TaggingMaps: React.FC = () => {
         layerGroup.addLayer(polyline);
       }
 
-      // (B) Render Marker & Badge START/STOP
       markers.forEach((item, index) => {
         const isFirst = index === 0;
         const isLast = index === markers.length - 1;
-        const showBadges = !isTagging; // Badge START/STOP muncul saat tagging di-STOP
+        const showBadges = !isTagging;
+        const currentType = (item.type || "TIANG").toUpperCase();
 
-        let iconSymbol = "⚪";
-        if (item.type === "ODP") iconSymbol = "🗄️";
-        if (item.type === "ODC") iconSymbol = "📦";
-        if (item.type === "HOMEPASS") iconSymbol = "🏠";
+        // Render bentuk ikon hitam putih presisi ala Google Earth
+        let shapeHtml = '<div class="icon-tiang-geom"></div>';
+        if (currentType === "ODP") {
+          shapeHtml = '<div class="icon-odp-geom"><div class="inner-dot"></div></div>';
+        } else if (currentType === "ODC") {
+          shapeHtml = '<div class="icon-odc-geom"></div>';
+        } else if (currentType === "HOMEPASS") {
+          shapeHtml = '<div class="icon-homepass-geom"><div class="roof"></div><div class="base"></div></div>';
+        }
 
         const pinHtml = `
           <div class="figma-tracking-pin">
             ${showBadges && isFirst ? '<div class="badge-capsule start-capsule">START</div>' : ""}
             ${showBadges && isLast ? '<div class="badge-capsule stop-capsule">STOP</div>' : ""}
             
-            <div class="node-circle"></div>
+            <div class="shape-container">
+              ${shapeHtml}
+            </div>
             
             <div class="label-capsule">
-              <span class="icon-span">${iconSymbol}</span>
               <span>${item.label || item.type}</span>
             </div>
           </div>
@@ -148,22 +147,18 @@ const TaggingMaps: React.FC = () => {
         layerGroup.addLayer(marker);
       });
 
-      // Fit View ke Seluruh Marker
       const polylineCoords: L.LatLngTuple[] = markers.map((m) => [m.lat, m.lng]);
       const bounds = L.latLngBounds(polylineCoords);
       map.fitBounds(bounds, { padding: [50, 50] });
     }
   }, [markers, isTagging]);
 
-  // HANDLER START (BERSIHKAN PETA SAAT KLIK START)
   const handleStart = () => {
-    setMarkers([]); // Kosongkan peta untuk sesi rekam baru
+    setMarkers([]);
     setIsTagging(true);
   };
 
-  // HANDLER STOP
   const handleStop = () => {
-    // Validasi pencegahan jika belum START
     if (!isTagging) {
       alert("Silakan klik tombol START terlebih dahulu sebelum menyelesaikan tagging!");
       return;
@@ -189,7 +184,6 @@ const TaggingMaps: React.FC = () => {
     });
   };
 
-  // NAVIGASI DENGAN MEMBAWA STATE LENGKAP KE FORM
   const handleMenuClick = (path: string) => {
     if (!isTagging) {
       alert("Silakan klik tombol START terlebih dahulu untuk mengaktifkan sesi tagging!");
@@ -207,7 +201,6 @@ const TaggingMaps: React.FC = () => {
   return (
     <MainLayout pageTitle="Tagging Map" activeMenu="tagging">
       <div className="tagging-page">
-        {/* MAP SECTION */}
         <section className="tagging-map-section">
           <div ref={mapRef} className="tagging-real-map" />
 
@@ -219,7 +212,6 @@ const TaggingMaps: React.FC = () => {
           )}
         </section>
 
-        {/* CONTROLS */}
         <div className="tagging-controls">
           <button
             type="button"
@@ -245,22 +237,34 @@ const TaggingMaps: React.FC = () => {
           </button>
         </div>
 
-        {/* MENU LEGEND / NAVIGATION CARDS */}
         <section className="tagging-legend">
           <div className="legend-card" onClick={() => handleMenuClick("/tagging/odp")}>
-            <div className="legend-icon odp-icon"><span>◉</span></div>
+            <div className="legend-icon odp-icon">
+              <div className="icon-odp-geom" style={{ transform: "scale(0.9)" }}>
+                <div className="inner-dot"></div>
+              </div>
+            </div>
             <div className="legend-text"><strong>ODP</strong></div>
           </div>
           <div className="legend-card" onClick={() => handleMenuClick("/tagging/odc")}>
-            <div className="legend-icon odc-icon"><span>▥</span></div>
+            <div className="legend-icon odc-icon">
+              <div className="icon-odc-geom" style={{ transform: "scale(0.7)" }}></div>
+            </div>
             <div className="legend-text"><strong>ODC</strong></div>
           </div>
           <div className="legend-card" onClick={() => handleMenuClick("/tagging/tiang")}>
-            <div className="legend-icon tiang-icon"><span>◎</span></div>
+            <div className="legend-icon tiang-icon">
+              <div className="icon-tiang-geom" style={{ transform: "scale(0.9)" }}></div>
+            </div>
             <div className="legend-text"><strong>TIANG</strong></div>
           </div>
           <div className="legend-card" onClick={() => handleMenuClick("/tagging/homepass")}>
-            <div className="legend-icon homepass-icon"><span>⌂</span></div>
+            <div className="legend-icon homepass-icon">
+              <div className="icon-homepass-geom" style={{ transform: "scale(0.8)" }}>
+                <div className="roof"></div>
+                <div className="base"></div>
+              </div>
+            </div>
             <div className="legend-text"><strong>HOMEPASS</strong></div>
           </div>
         </section>

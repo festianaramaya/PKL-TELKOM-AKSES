@@ -3757,28 +3757,22 @@ app.post('/api/create-lop', (req: any, res: any, next: any) => {
   });
 
 // === ENDPOINT WKT TO KML ===
-// Riwayat perbaikan (ringkas):
-// 1. Pin polygon pakai centroid berbobot-area (shoelace), bukan rata-rata vertex mentah.
-// 2. Polygon & pin dipisah jadi 2 Placemark (bukan MultiGeometry campuran) -- viewer tertentu merusak shape kalau digabung.
-// 3. Parsing ring/hole/multipolygon pakai split kurung yang sadar kedalaman, bukan regex.
-// 4. Deteksi lat/lon tertukar diterapkan konsisten per-titik.
-// 5. Centroid area tidak selalu di dalam polygon cekung -> diverifikasi point-in-polygon, fallback ke polylabel (pole of inaccessibility).
-// 6. Dukungan kolom "Center Polygon" (WKT POINT manual) sbg pin, prioritas di atas hasil hitung otomatis.
-// 7. Alias kolom WKT ditambah 'polygon'/'boundary'/'batas'/'bidang' dst agar header "Polygon" polos ikut kedeteksi.
-// 8. Counter diagnostik `duplicateWktRows` -- baris dgn WKT identik persis (indikasi CSV salah kepotong kolom).
-// 9. Delimiter-rescue: coba beberapa delimiter (,;|tab), pilih yg WKT-nya paling utuh. WKT yg tetap kepotong (kurung tak seimbang) di-skip & dicatat sbg `malformedWktRows`.
-// 10. Verifikasi self-intersection per ring: kalau hasil vote arah lat/lon menyilang diri sendiri tapi kebalikannya valid, auto-correct (`geometryAutoCorrectedRows`). Kalau dua-duanya menyilang, tetap dipakai apa adanya tapi dicatat (`selfIntersectingRows`).
-// 11. Counter `suspiciouslyLargeRows` -- bounding box > 0.5 derajat, indikasi vertex "melompat"/tercampur baris lain.
-// 12. Dukungan input file Excel (.xlsx/.xls) selain CSV -- deteksi otomatis dari nama file/mimetype, parse via SheetJS, delimiter-rescue CSV dilewati krn tidak relevan.
-// 13. Kalau 0 baris menghasilkan geometry valid, kembalikan 400 + diagnostics (kolom yg terdeteksi, counter skip/malformed) alih-alih kirim KML kosong tanpa penjelasan. Header respons & komentar penutup dipindah ke setelah loop selesai.
-// 14. FALLBACK KE CENTER POLYGON: kalau kolom WKT yg dipilih (mis. "Kelurahan"/"Kecamatan"/"Kota"/"Provinsi")
-//     gagal diparse atau kosong, baris TIDAK langsung di-skip lagi. Kalau kolom "Center Polygon" (atau
-//     Center Lat/Lon) tersedia & valid, titik itu dipakai sbg geometry utama (Point), bukan cuma sbg pin
-//     seperti sebelumnya. Ini mengatasi kasus umum di file .xlsx: WKT polygon administrasi dgn vertex
-//     sangat banyak (level kota/provinsi) terpotong krn batas 32.767 karakter per sel Excel, sehingga
-//     kurungnya jadi tak seimbang dan gagal parse -- ditandai jg via counter baru
-//     `possiblyTruncatedByExcelCellLimit`. Kalau WKT-nya justru berhasil diparse, Center Polygon tetap
-//     dipakai sbg titik pin persis seperti perilaku lama (tidak menggantikan polygon yg valid).
+// Riwayat singkat:
+// 1. Pin polygon: centroid berbobot-area (shoelace), bukan rata-rata vertex.
+// 2. Polygon & pin jadi 2 Placemark terpisah (bukan MultiGeometry campuran).
+// 3. Parsing ring/hole/multipolygon: split kurung sadar-kedalaman, bukan regex.
+// 4. Deteksi lat/lon tertukar, diterapkan konsisten per-titik.
+// 5. Centroid bisa di luar polygon cekung -> verifikasi point-in-polygon, fallback polylabel.
+// 6. Kolom "Center Polygon" (WKT POINT manual) sbg pin, prioritas di atas hitung otomatis.
+// 7. Alias kolom WKT ditambah: polygon/boundary/batas/bidang, dst.
+// 8. Counter `duplicateWktRows` (WKT identik persis -> indikasi CSV kepotong kolom).
+// 9. Delimiter-rescue: coba beberapa delimiter, pilih paling utuh; tetap rusak -> skip (`malformedWktRows`).
+// 10. Verifikasi self-intersection per ring; auto-correct kalau arah sebaliknya valid (`geometryAutoCorrectedRows`), kalau dua-duanya salah -> `selfIntersectingRows`.
+// 11. Counter `suspiciouslyLargeRows` (bbox > 0.5° -> indikasi vertex melompat).
+// 12. Dukungan input .xlsx/.xls via SheetJS (delimiter-rescue dilewati).
+// 13. 0 baris valid -> return 400 + diagnostics, bukan KML kosong.
+// 14. Fallback ke Center Polygon sbg geometry utama kalau WKT gagal/kosong -> counter `possiblyTruncatedByExcelCellLimit`.
+// 15. Kolom Latitude/Longitude utama ikut lewat rekonstruksi kalau parse polos gagal -> counter `reconstructedLatLonRows`; pesan error jadi sadar mode (latlon vs wkt).
 
 function normalizeHeaderName(name: string): string {
   return String(name || "")
@@ -3808,7 +3802,7 @@ function findColumnByAliases(headers: string[], aliases: string[]): string | nul
   return null;
 }
 
-// Cek WKT well-formed scr struktural: prefix dikenal + kurung seimbang. Menangkap WKT yg kepotong akibat CSV salah parse.
+// Cek WKT well-formed: prefix valid + kurung seimbang.
 function isWellFormedWkt(raw: string | undefined | null): boolean {
   const s = String(raw || "").trim();
   if (!s) return false;
@@ -3830,7 +3824,7 @@ interface DelimiterAttempt {
   malformedRate: number; // 0 = bersih, 1 = kolom WKT tak ketemu / semua rusak
 }
 
-// Parse CSV pakai satu kandidat delimiter, lalu skor "kerusakan"-nya dari sampel kolom WKT.
+// Parse CSV dgn satu delimiter, skor kerusakan dari sampel kolom WKT.
 function tryParseCsvWithDelimiter(csvText: string, delimiter: string): DelimiterAttempt | null {
   try {
     const records: Record<string, string>[] = parseCsvSync(csvText, {
@@ -3864,7 +3858,7 @@ function tryParseCsvWithDelimiter(csvText: string, delimiter: string): Delimiter
   }
 }
 
-// Coba beberapa delimiter umum, ambil yg malformedRate-nya paling rendah (pengaman kalau detectCsvDelimiter salah tebak).
+// Coba beberapa delimiter, ambil yg malformedRate terendah.
 function pickBestCsvDelimiter(
   csvText: string,
   initialDelimiter: string
@@ -3926,7 +3920,7 @@ function parseCoordList(str: string): [number, number][] {
     .filter((p): p is [number, number] => p !== null);
 }
 
-// Vote mayoritas satu ring penuh: tentukan apakah urutan lat/lon perlu ditukar. Vertex ambigu abstain.
+// Vote mayoritas ring: tentukan swap lat/lon atau tidak; vertex ambigu abstain.
 function analyzeRingCoordOrder(rawPairs: [number, number][]): 'asis' | 'swap' {
   let votesSwap = 0, votesAsIs = 0;
   for (const [a, b] of rawPairs) {
@@ -3952,7 +3946,7 @@ function onSegment(A: [number, number], B: [number, number], P: [number, number]
   );
 }
 
-// Tes perpotongan segmen [p1,p2] & [p3,p4], termasuk kasus collinear.
+// Tes perpotongan 2 segmen, termasuk kasus collinear.
 function segmentsIntersect(
   p1: [number, number], p2: [number, number],
   p3: [number, number], p4: [number, number]
@@ -3973,10 +3967,10 @@ function segmentsIntersect(
   return false;
 }
 
-// Ring > ini dilewati (skip cek) demi performa -- O(n^2).
+// Ring > ini di-skip demi performa (O(n^2)).
 const SELF_INTERSECT_CHECK_MAX_VERTICES = 1500;
 
-// Cek apakah ring menyilang dirinya sendiri (dua sisi tak bertetangga berpotongan).
+// Cek ring menyilang diri sendiri (dua sisi tak bertetangga berpotongan).
 function ringSelfIntersects(ring: [number, number][]): boolean {
   const n = ring.length;
   if (n < 4) return false;
@@ -4000,11 +3994,11 @@ function ringSelfIntersects(ring: [number, number][]): boolean {
 
 interface RingParseResult {
   coords: [number, number][];
-  selfIntersecting: boolean;  // kedua interpretasi tetap menyilang diri sendiri
-  geometryCorrected: boolean; // vote awal salah, dikoreksi ke interpretasi sebaliknya
+  selfIntersecting: boolean;  // kedua interpretasi tetap menyilang diri
+  geometryCorrected: boolean; // vote awal salah, dikoreksi ke arah sebaliknya
 }
 
-// Parse ring dgn SATU keputusan tukar/tidak-tukar utk seluruh vertex (bukan per-titik), lalu diverifikasi via self-intersection test.
+// Parse ring dgn satu keputusan swap utk seluruh vertex, verifikasi via self-intersection.
 function parseRingCoordsConsistent(str: string): RingParseResult {
   const inner = str.trim().replace(/^\(/, "").replace(/\)$/, "");
   const tokens = inner.split(",");
@@ -4035,7 +4029,7 @@ function parseRingCoordsConsistent(str: string): RingParseResult {
   return { coords: voteResult, selfIntersecting: true, geometryCorrected: false };
 }
 
-// Rentang geografis Indonesia -- dipakai menuntun rekonstruksi kolom center yg titik desimalnya hilang/korup.
+// Rentang geografis Indonesia, penuntun rekonstruksi koordinat korup.
 const INDONESIA_LAT_RANGE: [number, number] = [-11, 6];
 const INDONESIA_LON_RANGE: [number, number] = [95, 141];
 
@@ -4049,7 +4043,7 @@ function digitsOnly(raw: string | undefined): { sign: 1 | -1; digits: string } |
   return { sign, digits };
 }
 
-// Bangun kandidat angka dgn titik desimal disisipkan setelah `intLen` digit pertama.
+// Sisipkan titik desimal setelah intLen digit pertama.
 function buildCandidate(sign: 1 | -1, digits: string, intLen: number): number | null {
   if (intLen < 1 || intLen > digits.length) return null;
   const intPart = digits.slice(0, intLen);
@@ -4059,7 +4053,8 @@ function buildCandidate(sign: 1 | -1, digits: string, intLen: number): number | 
   return isNaN(n) ? null : sign * n;
 }
 
-// Rekonstruksi koordinat yg titik desimalnya hilang: lucuti jadi digit murni, coba tiap posisi titik desimal, pilih kandidat pertama yg jatuh di rentang Indonesia (fallback ke rentang umum -90..90/-180..180). Aman jg dipakai utk data yg sudah bersih.
+// Rekonstruksi koordinat korup: coba tiap posisi titik desimal, pilih kandidat pertama yg valid
+// (rentang Indonesia, fallback rentang umum -90..90/-180..180). Aman jg dipakai utk data bersih.
 function reconstructCorruptedCoord(raw: string | undefined, kind: 'lat' | 'lon'): number | null {
   const parsed = digitsOnly(raw);
   if (!parsed) return null;
@@ -4079,7 +4074,7 @@ function reconstructCorruptedCoord(raw: string | undefined, kind: 'lat' | 'lon')
   return fallback;
 }
 
-// Ambil [lon, lat] dari "POINT(lon lat)" (atau "lon lat" polos) -- khusus kolom center gabungan.
+// Ambil [lon, lat] dari "POINT(lon lat)" atau "lon lat" polos.
 function extractWktPoint(raw: string): [number, number] | null {
   if (!raw) return null;
   const str = String(raw).trim();
@@ -4095,7 +4090,7 @@ function extractWktPoint(raw: string): [number, number] | null {
   return parseCoordPair(content);
 }
 
-// Resolusi pasangan center dari 2 kolom angka terpisah (Center Lat/Lon), pakai reconstructCorruptedCoord + swap-detection sbg jaring pengaman.
+// Resolusi Center Lat/Lon dari 2 kolom terpisah, pakai reconstructCorruptedCoord + swap-detection.
 function resolveCenterLatLon(
   latRaw: string | undefined,
   lonRaw: string | undefined
@@ -4114,7 +4109,42 @@ function resolveCenterLatLon(
   return [lonVal, latVal];
 }
 
-// Split per koma hanya di kedalaman kurung 0 -- utk pisah ring/polygon.
+// Resolusi 1 pasangan lat/lon dari 2 kolom apa pun: coba parse polos dulu, fallback ke
+// reconstructCorruptedCoord kalau gagal/di luar rentang. Dipakai utk kolom Lat/Lon utama & Center Lat/Lon (lihat #15).
+interface LatLonResolution {
+  point: [number, number]; // [lon, lat]
+  reconstructed: boolean;
+}
+
+function resolveLatLonPairDetailed(
+  latRaw: string | undefined,
+  lonRaw: string | undefined
+): LatLonResolution | null {
+  let latVal = parseFloatVal(latRaw);
+  let lonVal = parseFloatVal(lonRaw);
+  if (latVal !== null && lonVal !== null) {
+    if (Math.abs(latVal) > 90 && Math.abs(lonVal) <= 90) {
+      const temp = latVal;
+      latVal = lonVal;
+      lonVal = temp;
+    }
+    if (isValidLatLon(latVal, lonVal)) return { point: [lonVal, latVal], reconstructed: false };
+  }
+
+  const reconstructed = resolveCenterLatLon(latRaw, lonRaw);
+  if (!reconstructed) return null;
+  return { point: reconstructed, reconstructed: true };
+}
+
+function resolveLatLonPair(
+  latRaw: string | undefined,
+  lonRaw: string | undefined
+): [number, number] | null {
+  const r = resolveLatLonPairDetailed(latRaw, lonRaw);
+  return r ? r.point : null;
+}
+
+// Split koma di kedalaman kurung 0 (pisah ring/polygon).
 function splitTopLevel(str: string): string[] {
   const parts: string[] = [];
   let depth = 0;
@@ -4144,7 +4174,7 @@ function ringArea(ring: [number, number][]): number {
   return Math.abs(areaSum / 2);
 }
 
-// Centroid area (shoelace) -- hanya dijamin di dalam ring utk polygon convex; utk cekung cuma fast-path (lihat computeLabelPoint).
+// Centroid shoelace; hanya dijamin di dalam ring utk polygon convex.
 function computePolygonCentroid(ring: [number, number][]): [number, number] {
   const n = ring.length;
   let areaSum = 0, cxSum = 0, cySum = 0;
@@ -4176,12 +4206,12 @@ function buildPolygonKml(rings: [number, number][][]): string {
 }
 
 // =====================================================================
-// TITIK LABEL POLYGON -- fast-path centroid + fallback polylabel (pole of inaccessibility)
+// TITIK LABEL POLYGON: centroid + fallback polylabel
 // =====================================================================
 
 type Ring = [number, number][];
 
-// Jarak (x,y) ke tepi terdekat, bertanda: + di dalam, - di luar. Ray-casting per ring (outer+hole).
+// Jarak ke tepi terdekat (+ di dalam, - di luar), ray-casting per ring.
 function pointToPolygonDist(x: number, y: number, rings: Ring[]): number {
   let inside = false;
   let minDistSq = Infinity;
@@ -4229,7 +4259,7 @@ function ringBounds(ring: Ring): { minX: number; minY: number; maxX: number; max
   return { minX, minY, maxX, maxY };
 }
 
-// Batas bbox "wajar" per bidang (~55km). Generous scr sengaja.
+// Batas bbox wajar per bidang (~55km), sengaja longgar.
 const OVERSIZED_BBOX_DEGREES = 0.5;
 
 interface PLCell {
@@ -4245,7 +4275,7 @@ function makeCell(x: number, y: number, h: number, rings: Ring[]): PLCell {
   return { x, y, h, d, max: d + h * Math.SQRT2 };
 }
 
-// Max-heap sederhana berdasar `max`, utk best-first search sel grid.
+// Max-heap utk best-first search sel grid.
 class PLQueue {
   private items: PLCell[] = [];
 
@@ -4282,7 +4312,7 @@ class PLQueue {
   }
 }
 
-// Cari titik di dalam polygon yg jaraknya ke tepi paling jauh (ref: Mapbox Polylabel). Dijamin di dalam ring, termasuk polygon cekung/berlubang.
+// Cari titik terjauh dari tepi (ref: Mapbox Polylabel), dijamin di dalam ring meski cekung/berlubang.
 function polylabel(rings: Ring[], precision: number, maxIter: number = 20000): [number, number] {
   const outer = rings[0];
   const { minX, minY, maxX, maxY } = ringBounds(outer);
@@ -4323,7 +4353,7 @@ function polylabel(rings: Ring[], precision: number, maxIter: number = 20000): [
   return [best.x, best.y];
 }
 
-// Titik label akhir: coba centroid area dulu (murah), fallback ke polylabel kalau di luar ring (polygon cekung).
+// Titik label: centroid dulu, fallback polylabel kalau di luar ring.
 function computeLabelPoint(rings: Ring[]): [number, number] {
   const outer = rings[0];
   const areaCentroid = computePolygonCentroid(outer);
@@ -4346,7 +4376,7 @@ interface WktGeometryResult {
   hasOversizedBoundingBox?: boolean;
 }
 
-// Polygon & pin sengaja dipisah (bukan MultiGeometry campuran) -- lihat catatan #2 di atas.
+// Polygon & pin dipisah (lihat #2).
 function parseWktToKml(wktRaw: string): WktGeometryResult {
   const empty: WktGeometryResult = { geometry: "", labelPoint: null };
   try {
@@ -4482,8 +4512,7 @@ function excelCellToString(value: any): string {
   return String(value).trim();
 }
 
-// Cari baris header sebenarnya: baris pertama yg punya >=2 kolom terisi.
-// Melewati baris judul/laporan yg sering ada di atas tabel data Excel.
+// Cari baris header (baris pertama dgn >=2 kolom terisi), lewati baris judul/laporan.
 function findExcelHeaderRowIndex(rows: any[][]): number {
   for (let i = 0; i < rows.length; i++) {
     const nonEmptyCount = rows[i].filter((c) => excelCellToString(c) !== "").length;
@@ -4492,8 +4521,7 @@ function findExcelHeaderRowIndex(rows: any[][]): number {
   return 0;
 }
 
-// Isi header yg kosong akibat merged cell horizontal di baris header,
-// pakai nilai dari sel kiri-atas merge tsb.
+// Isi header kosong akibat merged cell, pakai nilai sel kiri-atas merge.
 function fillMergedHeaderCells(sheet: any, headerRowIndex: number, headers: string[]): string[] {
   const merges = (sheet['!merges'] || []) as any[];
   const filled = [...headers];
@@ -4508,8 +4536,7 @@ function fillMergedHeaderCells(sheet: any, headerRowIndex: number, headers: stri
   return filled;
 }
 
-// Konversi sheet Excel jadi records string spt hasil CSV parse. Baris kosong dilewati.
-// Baris header dideteksi otomatis (bukan selalu rows[0]) + merged header cell ditangani.
+// Konversi sheet Excel jadi records spt hasil CSV parse; header dideteksi otomatis, merged cell ditangani, baris kosong dilewati.
 function parseExcelToRecords(
   buffer: Buffer,
   sheetName?: string
@@ -4568,7 +4595,7 @@ app.post(
         descriptionColumns = [];
       }
 
-      // Excel vs CSV dari nama file/mimetype. Excel lewati delimiter-rescue (tak relevan, kolom sudah per-sel).
+      // Excel vs CSV dari nama file/mimetype; Excel lewati delimiter-rescue.
       const isExcel = isExcelFile(file.originalname || '', file.mimetype || '');
 
       let records: Record<string, string>[];
@@ -4640,7 +4667,7 @@ app.post(
         (nameColumnReq && headers.includes(nameColumnReq) ? nameColumnReq : null) ||
         findColumnByAliases(headers, ['name', 'nama', 'title', 'id', 'objectid', 'object_id', 'pointname']);
 
-      // Prioritas 1: kolom WKT POINT gabungan (mis. "Center Polygon"), format "lon lat" tidak ambigu.
+      // Prioritas 1: kolom WKT POINT gabungan (mis. "Center Polygon").
       const centerColumnReq = req.body.center_column;
       const centerColumn =
         (centerColumnReq && headers.includes(centerColumnReq) ? centerColumnReq : null) ||
@@ -4729,10 +4756,11 @@ app.post(
       let skippedInvalidCoords = 0;
       let usedLatLonFallback = 0;
       let usedManualCenter = 0;
-      let usedCenterAsMainGeometry = 0; // NEW: center dipakai sbg geometry utama (bukan cuma pin), krn WKT polygon gagal/kosong
+      let usedCenterAsMainGeometry = 0; // center jadi geometry utama (WKT gagal/kosong)
       let duplicateWktRows = 0;
       let malformedWktRows = 0;
-      let possiblyTruncatedByExcelCellLimit = 0; // NEW: WKT mendekati/kena batas 32.767 karakter per sel Excel
+      let possiblyTruncatedByExcelCellLimit = 0; // WKT kena batas 32.767 char Excel
+      let reconstructedLatLonRows = 0; // Lat/Lon korup yg berhasil direkonstruksi
       let selfIntersectingRows = 0;
       let geometryAutoCorrectedRows = 0;
       let suspiciouslyLargeRows = 0;
@@ -4749,14 +4777,15 @@ app.post(
           }
         }
 
-        let latVal = latColumn ? parseFloatVal(row[latColumn]) : null;
-        let lonVal = lonColumn ? parseFloatVal(row[lonColumn]) : null;
-
-        if (latVal !== null && lonVal !== null) {
-          if (Math.abs(latVal) > 90 && Math.abs(lonVal) <= 90) {
-            const temp = latVal;
-            latVal = lonVal;
-            lonVal = temp;
+        // Parse polos dulu, fallback rekonstruksi kalau gagal/di luar rentang (lihat #15).
+        let latVal: number | null = null;
+        let lonVal: number | null = null;
+        if (latColumn && lonColumn) {
+          const resolved = resolveLatLonPairDetailed(row[latColumn], row[lonColumn]);
+          if (resolved) {
+            lonVal = resolved.point[0];
+            latVal = resolved.point[1];
+            if (resolved.reconstructed) reconstructedLatLonRows++;
           }
         }
 
@@ -4773,7 +4802,7 @@ app.post(
           geometry = buildPointGeometry(lonVal as number, latVal as number);
         } else {
           if (rowWkt) {
-            // WKT yg struktural rusak (kurung tak seimbang) di-skip, bukan dipaksa parse -- lihat catatan #9.
+            // WKT rusak struktural (kurung tak seimbang) di-skip (lihat #9).
             if (isWellFormedWkt(rowWkt)) {
               const parsed = parseWktToKml(rowWkt);
               geometry = parsed.geometry;
@@ -4783,19 +4812,15 @@ app.post(
               if (parsed.hasOversizedBoundingBox) suspiciouslyLargeRows++;
             } else {
               malformedWktRows++;
-              // Sel Excel maksimal 32.767 karakter -- WKT polygon administrasi (kecamatan/kota/provinsi)
-              // yg vertex-nya banyak sering terpotong PERSIS di batas ini saat file disimpan sbg .xlsx,
-              // sehingga kurungnya jadi tak seimbang & lolos sbg "malformed". Dicatat terpisah utk diagnosa,
-              // lihat juga catatan #14 di atas.
+              // Sel Excel maks 32.767 karakter; WKT panjang sering terpotong persis di batas ini (lihat #14).
               if (isExcel && rowWkt.length >= 32760) {
                 possiblyTruncatedByExcelCellLimit++;
               }
             }
           }
 
-          // Resolusi center manual SEKALI per baris -- dipakai dobel di bawah: (a) override titik pin
-          // kalau polygon berhasil diparse (perilaku lama), (b) fallback geometry utama kalau polygon
-          // gagal/kosong (BARU -- lihat catatan #14).
+          // Resolusi center manual sekali per baris: (a) jadi pin kalau polygon valid,
+          // (b) jadi geometry utama kalau polygon gagal/kosong (lihat #14).
           let manualCenterPt: [number, number] | null = null;
           if (centerColumn && row[centerColumn]) {
             const centerPt = extractWktPoint(row[centerColumn]);
@@ -4803,21 +4828,20 @@ app.post(
               manualCenterPt = centerPt;
             }
           } else if (centerLonColumn && centerLatColumn) {
-            const centerPt = resolveCenterLatLon(row[centerLatColumn], row[centerLonColumn]);
+            const centerPt = resolveLatLonPair(row[centerLatColumn], row[centerLonColumn]);
             if (centerPt) {
               manualCenterPt = centerPt;
             }
           }
 
           if (geometry && manualCenterPt) {
-            // Polygon berhasil diparse -> Center Polygon dipakai sbg titik pin, spt sebelumnya.
+            // Polygon valid -> Center Polygon jadi pin.
             labelPoint = manualCenterPt;
             usedManualCenter++;
           } else if (!geometry && manualCenterPt) {
-            // Polygon gagal/kosong TAPI Center Polygon valid -> JANGAN skip baris ini.
-            // Pakai Center Polygon sbg geometry utama (Point).
+            // Polygon gagal tapi Center Polygon valid -> pakai sbg geometry utama.
             geometry = buildPointGeometry(manualCenterPt[0], manualCenterPt[1]);
-            labelPoint = null; // hindari 2 Placemark dobel persis di titik yg sama
+            labelPoint = null; // hindari Placemark dobel di titik sama
             usedManualCenter++;
             usedCenterAsMainGeometry++;
           }
@@ -4857,7 +4881,7 @@ app.post(
 
         const description = descSegments.length ? descSegments.join('<br/>') : '';
 
-        // labelPoint terisi -> nama hanya di Placemark pin, bukan dobel.
+        // labelPoint ada -> nama hanya di Placemark pin.
         const mainPlacemarkName = labelPoint ? '' : name;
 
         kmlParts.push(`
@@ -4876,17 +4900,21 @@ app.post(
       }
 
       if (featureCount === 0) {
+        const noDataMessage = geometryMode === 'latlon'
+          ? 'Tidak ada baris yang menghasilkan koordinat valid. Kemungkinan kolom Latitude/Longitude yg dipilih tidak terbaca dgn benar, nilainya di luar rentang -90..90/-180..180, atau formatnya (titik desimal hilang/korup) tidak berhasil direkonstruksi.'
+          : 'Tidak ada baris yang menghasilkan geometry valid. Kemungkinan header kolom (WKT/Lat/Lon/Name) tidak terbaca dengan benar dari file ini, atau WKT terlalu panjang/rusak dan tidak ada kolom Center Polygon/Center Lat-Lon sbg fallback.';
+
         return res.status(400).json({
           success: false,
-          message: records.length === 0
-            ? 'File tidak berisi baris data.'
-            : 'Tidak ada baris yang menghasilkan geometry valid. Kemungkinan header kolom (WKT/Lat/Lon/Name) tidak terbaca dengan benar dari file ini, atau WKT terlalu panjang/rusak dan tidak ada kolom Center Polygon sbg fallback.',
+          message: records.length === 0 ? 'File tidak berisi baris data.' : noDataMessage,
           diagnostics: {
             totalRowsRead: records.length,
+            geometryMode,
             detectedColumns: { wktColumn, latColumn, lonColumn, nameColumn, centerColumn, centerLatColumn, centerLonColumn },
             skippedInvalidCoords,
             malformedWktRows,
             possiblyTruncatedByExcelCellLimit,
+            reconstructedLatLonRows,
             duplicateWktRows,
             sourceFileType: isExcel ? 'Excel' : 'CSV',
           },
@@ -4900,7 +4928,7 @@ app.post(
       );
 
       kmlParts.push(`
-    <!-- Total features processed: ${featureCount}, skipped invalid coordinates: ${skippedInvalidCoords}, latlon fallback used: ${usedLatLonFallback}, manual center used: ${usedManualCenter} (as main geometry: ${usedCenterAsMainGeometry}), duplicate WKT rows: ${duplicateWktRows}, malformed WKT rows: ${malformedWktRows} (possibly truncated by Excel 32767-char cell limit: ${possiblyTruncatedByExcelCellLimit}), self-intersecting rings: ${selfIntersectingRows}, geometry auto-corrected rings: ${geometryAutoCorrectedRows}, suspiciously large rows: ${suspiciouslyLargeRows}, source file type: ${isExcel ? 'Excel' : 'CSV'}, CSV delimiter used: "${usedDelimiter}"${delimiterAutoCorrected ? ' (auto-corrected from initial guess "' + initialDelimiter + '")' : ''} -->
+    <!-- Total features processed: ${featureCount}, skipped invalid coordinates: ${skippedInvalidCoords}, latlon fallback used: ${usedLatLonFallback}, reconstructed lat/lon rows: ${reconstructedLatLonRows}, manual center used: ${usedManualCenter} (as main geometry: ${usedCenterAsMainGeometry}), duplicate WKT rows: ${duplicateWktRows}, malformed WKT rows: ${malformedWktRows} (possibly truncated by Excel 32767-char cell limit: ${possiblyTruncatedByExcelCellLimit}), self-intersecting rings: ${selfIntersectingRows}, geometry auto-corrected rings: ${geometryAutoCorrectedRows}, suspiciously large rows: ${suspiciouslyLargeRows}, source file type: ${isExcel ? 'Excel' : 'CSV'}, CSV delimiter used: "${usedDelimiter}"${delimiterAutoCorrected ? ' (auto-corrected from initial guess "' + initialDelimiter + '")' : ''} -->
 </Document>
 </kml>`);
 
