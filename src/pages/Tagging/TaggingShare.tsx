@@ -29,7 +29,7 @@ export const TaggingShare: React.FC = () => {
   const markers = state?.markers || [];
 
   const getKmlFile = (): File => {
-    // Definisi Style Icon bawaan Google Maps/Earth
+    // Definisi Style Icon KML (Google Earth: ODP & ODC berwarna Merah)
     const kmlStyles = `
       <Style id="icon-tiang">
         <IconStyle>
@@ -41,17 +41,16 @@ export const TaggingShare: React.FC = () => {
       <Style id="icon-odp">
         <IconStyle>
           <Icon>
-            <href>http://maps.google.com/mapfiles/kml/shapes/placemark_square.png</href>
+            <href>http://maps.google.com/mapfiles/kml/paddle/red-circle.png</href>
           </Icon>
-          <color>ff0000ff</color> <!-- Warna Merah -->
         </IconStyle>
       </Style>
       <Style id="icon-odc">
         <IconStyle>
           <Icon>
-            <href>http://maps.google.com/mapfiles/kml/shapes/caution.png</href>
+            <href>http://maps.google.com/mapfiles/kml/shapes/triangle.png</href>
           </Icon>
-          <color>ff0000ff</color> <!-- Segitiga Merah -->
+          <color>ff0000ff</color> <!-- Mengatur Segitiga Menjadi Merah di Google Earth -->
         </IconStyle>
       </Style>
       <Style id="icon-homepass">

@@ -55,12 +55,14 @@ export const TaggingTracking: React.FC = () => {
         const isStop = index === markers.length - 1;
         const currentType = item.type.toUpperCase();
 
-        // Render bentuk ikon persis seperti referensi Google Earth tapi versi hitam putih
+        // Render bentuk ikon Hitam Putih untuk Web Tracking
         let shapeHtml = '<div class="icon-tiang-geom"></div>';
         
         if (currentType === "ODP") {
+          // ODP Hitam Putih (Lingkaran Merah di Google Earth -> Lingkaran Hitam Putih di Web)
           shapeHtml = '<div class="icon-odp-geom"><div class="inner-dot"></div></div>';
         } else if (currentType === "ODC") {
+          // ODC Hitam Putih (Segitiga Hitam Putih)
           shapeHtml = '<div class="icon-odc-geom"></div>';
         } else if (currentType === "HOMEPASS") {
           shapeHtml = '<div class="icon-homepass-geom"><div class="roof"></div><div class="base"></div></div>';
@@ -111,7 +113,7 @@ export const TaggingTracking: React.FC = () => {
         <div className="tracking-map-card">
           <div ref={mapRef} className="tracking-leaflet-map" />
 
-          {/* Legend Hitam Putih dengan Bentuk Presisi */}
+          {/* Legend Hitam Putih */}
           <div className="figma-map-legend">
             <div className="legend-row">
               <div className="legend-icon-box"><div className="icon-tiang-geom" style={{transform: 'scale(0.8)'}}></div></div>
@@ -126,7 +128,7 @@ export const TaggingTracking: React.FC = () => {
               <span>ODC</span>
             </div>
             <div className="legend-row">
-              <div className="legend-icon-box"><div className="icon-homepass-geom" style={{transform: 'scale(0.7)'}}><div class="roof"></div><div class="base"></div></div></div>
+              <div className="legend-icon-box"><div className="icon-homepass-geom" style={{transform: 'scale(0.7)'}}><div className="roof"></div><div className="base"></div></div></div>
               <span>HOMEPASS</span>
             </div>
           </div>
