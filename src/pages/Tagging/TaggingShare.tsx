@@ -29,7 +29,7 @@ export const TaggingShare: React.FC = () => {
   const markers = state?.markers || [];
 
   const getKmlFile = (): File => {
-    // Definisi Style Icon KML (Google Earth: ODP & ODC berwarna Merah)
+    // Definisi Style Icon KML & Style untuk Garis Tracking (Warna Kuning)
     const kmlStyles = `
       <Style id="icon-tiang">
         <IconStyle>
@@ -60,8 +60,16 @@ export const TaggingShare: React.FC = () => {
           </Icon>
         </IconStyle>
       </Style>
+      <!-- Style untuk Garis Jalur Tracking (Kuning) -->
+      <Style id="tracking-line-style">
+        <LineStyle>
+          <color>ff00ffff</color>
+          <width>4</width>
+        </LineStyle>
+      </Style>
     `;
 
+    // 1. Render Titik-titik Marker (Placemark)
     const placemarksXml = markers
       .map((p) => {
         let styleId = 'icon-tiang';
@@ -83,12 +91,33 @@ export const TaggingShare: React.FC = () => {
       })
       .join('');
 
+    // 2. Render Jalur Tracking (LineString) jika marker lebih dari 1
+    let lineStringXml = '';
+    if (markers.length > 1) {
+      const coordinatesList = markers
+        .map((p) => `${p.lng},${p.lat},0`)
+        .join(' ');
+
+      lineStringXml = `
+    <Placemark>
+      <name>Jalur Tracking</name>
+      <styleUrl>#tracking-line-style</styleUrl>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          ${coordinatesList}
+        </coordinates>
+      </LineString>
+    </Placemark>`;
+    }
+
     const kmlContent = `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
     <name>${fileName}</name>
     ${kmlStyles}
     ${placemarksXml}
+    ${lineStringXml}
   </Document>
 </kml>`;
 
