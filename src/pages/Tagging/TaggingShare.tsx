@@ -29,7 +29,7 @@ export const TaggingShare: React.FC = () => {
   const markers = state?.markers || [];
 
   const getKmlFile = (): File => {
-    // Definisi Style Icon bawaan Google Maps/Earth
+    // Definisi Style Icon KML & Style untuk Garis Tracking (Warna Kuning)
     const kmlStyles = `
       <Style id="icon-tiang">
         <IconStyle>
@@ -41,17 +41,16 @@ export const TaggingShare: React.FC = () => {
       <Style id="icon-odp">
         <IconStyle>
           <Icon>
-            <href>http://maps.google.com/mapfiles/kml/shapes/placemark_square.png</href>
+            <href>http://maps.google.com/mapfiles/kml/paddle/red-circle.png</href>
           </Icon>
-          <color>ff0000ff</color> <!-- Warna Merah -->
         </IconStyle>
       </Style>
       <Style id="icon-odc">
         <IconStyle>
           <Icon>
-            <href>http://maps.google.com/mapfiles/kml/shapes/caution.png</href>
+            <href>http://maps.google.com/mapfiles/kml/shapes/triangle.png</href>
           </Icon>
-          <color>ff0000ff</color> <!-- Segitiga Merah -->
+          <color>ff0000ff</color> <!-- Mengatur Segitiga Menjadi Merah di Google Earth -->
         </IconStyle>
       </Style>
       <Style id="icon-homepass">
@@ -61,8 +60,16 @@ export const TaggingShare: React.FC = () => {
           </Icon>
         </IconStyle>
       </Style>
+      <!-- Style untuk Garis Jalur Tracking (Kuning) -->
+      <Style id="tracking-line-style">
+        <LineStyle>
+          <color>ff00ffff</color>
+          <width>4</width>
+        </LineStyle>
+      </Style>
     `;
 
+    // 1. Render Titik-titik Marker (Placemark)
     const placemarksXml = markers
       .map((p) => {
         let styleId = 'icon-tiang';
@@ -84,12 +91,33 @@ export const TaggingShare: React.FC = () => {
       })
       .join('');
 
+    // 2. Render Jalur Tracking (LineString) jika marker lebih dari 1
+    let lineStringXml = '';
+    if (markers.length > 1) {
+      const coordinatesList = markers
+        .map((p) => `${p.lng},${p.lat},0`)
+        .join(' ');
+
+      lineStringXml = `
+    <Placemark>
+      <name>Jalur Tracking</name>
+      <styleUrl>#tracking-line-style</styleUrl>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          ${coordinatesList}
+        </coordinates>
+      </LineString>
+    </Placemark>`;
+    }
+
     const kmlContent = `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
     <name>${fileName}</name>
     ${kmlStyles}
     ${placemarksXml}
+    ${lineStringXml}
   </Document>
 </kml>`;
 

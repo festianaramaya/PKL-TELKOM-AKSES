@@ -13,8 +13,11 @@ export const OdpForm: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const existingMarkers = location.state?.existingMarkers || [];
-  const isTagging = location.state?.isTagging ?? true;
+  // Ambil data existingMarkers dari state atau sessionStorage sebagai fallback jika di-back dari HP
+  const savedMarkers = sessionStorage.getItem('tagging_markers');
+  const existingMarkers =
+    location.state?.existingMarkers ||
+    (savedMarkers ? JSON.parse(savedMarkers) : []);
 
   const [formData, setFormData] = useState<OdpFormData>({
     label: '',
@@ -38,7 +41,6 @@ export const OdpForm: React.FC = () => {
     e.preventDefault();
     setIsLoadingLocation(true);
 
-    // Ambil koordinat GPS perangkat lokasi asli pengguna
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -53,7 +55,11 @@ export const OdpForm: React.FC = () => {
 
           setIsLoadingLocation(false);
 
-          // Pindah kembali ke peta membawa marker lokasi asli
+          // Simpan update markers ke sessionStorage
+          const updatedMarkers = [...existingMarkers, newMarker];
+          sessionStorage.setItem('tagging_markers', JSON.stringify(updatedMarkers));
+          sessionStorage.setItem('tagging_active', 'true');
+
           navigate('/tagging', {
             state: {
               newMarker,
@@ -66,7 +72,7 @@ export const OdpForm: React.FC = () => {
           setIsLoadingLocation(false);
           alert('Gagal mengambil lokasi GPS asli: ' + error.message);
         },
-        { enableHighAccuracy: true } // Presisi lokasi tinggi
+        { enableHighAccuracy: true }
       );
     } else {
       setIsLoadingLocation(false);
@@ -75,9 +81,13 @@ export const OdpForm: React.FC = () => {
   };
 
   const handleBatal = () => {
-    navigate('/tagging', {
-      state: { existingMarkers, isTagging },
-    });
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/tagging', {
+        state: { existingMarkers, isTagging: true },
+      });
+    }
   };
 
   return (

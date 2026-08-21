@@ -21,12 +21,26 @@ const TaggingMaps: React.FC = () => {
   const leafletMapRef = useRef<L.Map | null>(null);
   const layerGroupRef = useRef<L.LayerGroup | null>(null);
 
+  // Load awal dari sessionStorage jika ada (mencegah hilang saat Back HP)
+  const savedMarkers = sessionStorage.getItem("tagging_markers");
+  const savedIsTagging = sessionStorage.getItem("tagging_active");
+
   const initialMarkers: TaggingMarkerData[] =
-    location.state?.markers || location.state?.existingMarkers || [];
-  const initialIsTagging: boolean = location.state?.isTagging ?? false;
+    location.state?.markers ||
+    location.state?.existingMarkers ||
+    (savedMarkers ? JSON.parse(savedMarkers) : []);
+
+  const initialIsTagging: boolean =
+    location.state?.isTagging ?? (savedIsTagging === "true");
 
   const [isTagging, setIsTagging] = useState<boolean>(initialIsTagging);
   const [markers, setMarkers] = useState<TaggingMarkerData[]>(initialMarkers);
+
+  // Sync state ke sessionStorage setiap ada perubahan markers/isTagging
+  useEffect(() => {
+    sessionStorage.setItem("tagging_markers", JSON.stringify(markers));
+    sessionStorage.setItem("tagging_active", String(isTagging));
+  }, [markers, isTagging]);
 
   useEffect(() => {
     if (location.state?.newMarker) {
@@ -34,13 +48,15 @@ const TaggingMaps: React.FC = () => {
 
       setMarkers((prev) => {
         if (prev.some((m) => m.id === newMarker.id)) return prev;
-        return [...prev, newMarker];
+        const updated = [...prev, newMarker];
+        sessionStorage.setItem("tagging_markers", JSON.stringify(updated));
+        return updated;
       });
 
       setIsTagging(true);
+      sessionStorage.setItem("tagging_active", "true");
       window.history.replaceState({}, document.title);
-    } 
-    else if (location.state?.markers) {
+    } else if (location.state?.markers) {
       setMarkers(location.state.markers);
       setIsTagging(false);
       window.history.replaceState({}, document.title);
@@ -105,15 +121,12 @@ const TaggingMaps: React.FC = () => {
         const showBadges = !isTagging;
         const currentType = (item.type || "TIANG").toUpperCase();
 
-        // Render bentuk ikon hitam putih presisi ala Google Earth
-        let shapeHtml = '<div class="icon-tiang-geom"></div>';
-        if (currentType === "ODP") {
-          shapeHtml = '<div class="icon-odp-geom"><div class="inner-dot"></div></div>';
-        } else if (currentType === "ODC") {
-          shapeHtml = '<div class="icon-odc-geom"></div>';
-        } else if (currentType === "HOMEPASS") {
-          shapeHtml = '<div class="icon-homepass-geom"><div class="roof"></div><div class="base"></div></div>';
-        }
+        let imgName = "tiang.png";
+        if (currentType === "ODP") imgName = "odp.png";
+        else if (currentType === "ODC") imgName = "odc.png";
+        else if (currentType === "HOMEPASS") imgName = "homepass.png";
+
+        const shapeHtml = `<img src="${import.meta.env.BASE_URL}images/${imgName}" alt="${currentType}" class="marker-img-icon monochrome-icon" />`;
 
         const pinHtml = `
           <div class="figma-tracking-pin">
@@ -156,6 +169,8 @@ const TaggingMaps: React.FC = () => {
   const handleStart = () => {
     setMarkers([]);
     setIsTagging(true);
+    sessionStorage.setItem("tagging_markers", JSON.stringify([]));
+    sessionStorage.setItem("tagging_active", "true");
   };
 
   const handleStop = () => {
@@ -165,6 +180,8 @@ const TaggingMaps: React.FC = () => {
     }
 
     setIsTagging(false);
+    sessionStorage.removeItem("tagging_markers");
+    sessionStorage.removeItem("tagging_active");
 
     const totalPoints = markers.length;
     const estimatedBytes = Math.max(1024 * 15, totalPoints * 2048);
@@ -237,35 +254,78 @@ const TaggingMaps: React.FC = () => {
           </button>
         </div>
 
-        <section className="tagging-legend">
-          <div className="legend-card" onClick={() => handleMenuClick("/tagging/odp")}>
-            <div className="legend-icon odp-icon">
-              <div className="icon-odp-geom" style={{ transform: "scale(0.9)" }}>
-                <div className="inner-dot"></div>
+        {/* MENU NAVIGASI GRID SEJAJAR 4 */}
+        <section className="tagging-grid-container">
+          {/* ODP */}
+          <div className="grid-menu-item" onClick={() => handleMenuClick("/tagging/odp")}>
+            <div className="outer-circle">
+              <div className="inner-square">
+                <img
+                  src={`${import.meta.env.BASE_URL}images/odp.png`}
+                  alt="ODP"
+                  className="menu-icon-img black-icon"
+                />
               </div>
             </div>
-            <div className="legend-text"><strong>ODP</strong></div>
-          </div>
-          <div className="legend-card" onClick={() => handleMenuClick("/tagging/odc")}>
-            <div className="legend-icon odc-icon">
-              <div className="icon-odc-geom" style={{ transform: "scale(0.7)" }}></div>
-            </div>
-            <div className="legend-text"><strong>ODC</strong></div>
-          </div>
-          <div className="legend-card" onClick={() => handleMenuClick("/tagging/tiang")}>
-            <div className="legend-icon tiang-icon">
-              <div className="icon-tiang-geom" style={{ transform: "scale(0.9)" }}></div>
-            </div>
-            <div className="legend-text"><strong>TIANG</strong></div>
-          </div>
-          <div className="legend-card" onClick={() => handleMenuClick("/tagging/homepass")}>
-            <div className="legend-icon homepass-icon">
-              <div className="icon-homepass-geom" style={{ transform: "scale(0.8)" }}>
-                <div className="roof"></div>
-                <div className="base"></div>
+            <div className="group-95-ot-frame-group87-gi">
+              <div className="group-95-ot-text-odp-cz1">
+                <p className="group-95-ot-text-odp-cz2">ODP</p>
               </div>
             </div>
-            <div className="legend-text"><strong>HOMEPASS</strong></div>
+          </div>
+
+          {/* ODC */}
+          <div className="grid-menu-item" onClick={() => handleMenuClick("/tagging/odc")}>
+            <div className="outer-circle">
+              <div className="inner-square">
+                <img
+                  src={`${import.meta.env.BASE_URL}images/odc.png`}
+                  alt="ODC"
+                  className="menu-icon-img black-icon"
+                />
+              </div>
+            </div>
+            <div className="group-95-ot-frame-group874w">
+              <div className="group-95-ot-text-odc-tv1">
+                <p className="group-95-ot-text-odc-tv2">ODC</p>
+              </div>
+            </div>
+          </div>
+
+          {/* TIANG */}
+          <div className="grid-menu-item" onClick={() => handleMenuClick("/tagging/tiang")}>
+            <div className="outer-circle">
+              <div className="inner-square">
+                <img
+                  src={`${import.meta.env.BASE_URL}images/tiang.png`}
+                  alt="TIANG"
+                  className="menu-icon-img black-icon"
+                />
+              </div>
+            </div>
+            <div className="group-95-ot-frame-group87-vb">
+              <div className="group-95-ot-text-tiang6c1">
+                <p className="group-95-ot-text-tiang6c2">TIANG</p>
+              </div>
+            </div>
+          </div>
+
+          {/* HOMEPASS */}
+          <div className="grid-menu-item" onClick={() => handleMenuClick("/tagging/homepass")}>
+            <div className="outer-circle">
+              <div className="inner-square">
+                <img
+                  src={`${import.meta.env.BASE_URL}images/homepass.png`}
+                  alt="HOMEPASS"
+                  className="menu-icon-img black-icon"
+                />
+              </div>
+            </div>
+            <div className="group-95-ot-frame-group877i">
+              <div className="group-95-ot-text-homepass-wh1">
+                <p className="group-95-ot-text-homepass-wh2">HOMEPASS</p>
+              </div>
+            </div>
           </div>
         </section>
       </div>

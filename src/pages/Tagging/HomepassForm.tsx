@@ -12,8 +12,10 @@ export const HomepassForm: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const existingMarkers = location.state?.existingMarkers || [];
-  const isTagging = location.state?.isTagging ?? true;
+  const savedMarkers = sessionStorage.getItem('tagging_markers');
+  const existingMarkers =
+    location.state?.existingMarkers ||
+    (savedMarkers ? JSON.parse(savedMarkers) : []);
 
   const [formData, setFormData] = useState<HomepassFormData>({
     noRumah: '',
@@ -48,6 +50,10 @@ export const HomepassForm: React.FC = () => {
 
           setIsLoadingLocation(false);
 
+          const updatedMarkers = [...existingMarkers, newMarker];
+          sessionStorage.setItem('tagging_markers', JSON.stringify(updatedMarkers));
+          sessionStorage.setItem('tagging_active', 'true');
+
           navigate('/tagging', {
             state: {
               newMarker,
@@ -69,9 +75,13 @@ export const HomepassForm: React.FC = () => {
   };
 
   const handleBatal = () => {
-    navigate('/tagging', {
-      state: { existingMarkers, isTagging },
-    });
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/tagging', {
+        state: { existingMarkers, isTagging: true },
+      });
+    }
   };
 
   return (
