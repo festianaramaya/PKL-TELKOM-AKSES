@@ -21,12 +21,26 @@ const TaggingMaps: React.FC = () => {
   const leafletMapRef = useRef<L.Map | null>(null);
   const layerGroupRef = useRef<L.LayerGroup | null>(null);
 
+  // Load awal dari sessionStorage jika ada (mencegah hilang saat Back HP)
+  const savedMarkers = sessionStorage.getItem("tagging_markers");
+  const savedIsTagging = sessionStorage.getItem("tagging_active");
+
   const initialMarkers: TaggingMarkerData[] =
-    location.state?.markers || location.state?.existingMarkers || [];
-  const initialIsTagging: boolean = location.state?.isTagging ?? false;
+    location.state?.markers ||
+    location.state?.existingMarkers ||
+    (savedMarkers ? JSON.parse(savedMarkers) : []);
+
+  const initialIsTagging: boolean =
+    location.state?.isTagging ?? (savedIsTagging === "true");
 
   const [isTagging, setIsTagging] = useState<boolean>(initialIsTagging);
   const [markers, setMarkers] = useState<TaggingMarkerData[]>(initialMarkers);
+
+  // Sync state ke sessionStorage setiap ada perubahan markers/isTagging
+  useEffect(() => {
+    sessionStorage.setItem("tagging_markers", JSON.stringify(markers));
+    sessionStorage.setItem("tagging_active", String(isTagging));
+  }, [markers, isTagging]);
 
   useEffect(() => {
     if (location.state?.newMarker) {
@@ -34,13 +48,15 @@ const TaggingMaps: React.FC = () => {
 
       setMarkers((prev) => {
         if (prev.some((m) => m.id === newMarker.id)) return prev;
-        return [...prev, newMarker];
+        const updated = [...prev, newMarker];
+        sessionStorage.setItem("tagging_markers", JSON.stringify(updated));
+        return updated;
       });
 
       setIsTagging(true);
+      sessionStorage.setItem("tagging_active", "true");
       window.history.replaceState({}, document.title);
-    } 
-    else if (location.state?.markers) {
+    } else if (location.state?.markers) {
       setMarkers(location.state.markers);
       setIsTagging(false);
       window.history.replaceState({}, document.title);
@@ -153,6 +169,8 @@ const TaggingMaps: React.FC = () => {
   const handleStart = () => {
     setMarkers([]);
     setIsTagging(true);
+    sessionStorage.setItem("tagging_markers", JSON.stringify([]));
+    sessionStorage.setItem("tagging_active", "true");
   };
 
   const handleStop = () => {
@@ -162,6 +180,8 @@ const TaggingMaps: React.FC = () => {
     }
 
     setIsTagging(false);
+    sessionStorage.removeItem("tagging_markers");
+    sessionStorage.removeItem("tagging_active");
 
     const totalPoints = markers.length;
     const estimatedBytes = Math.max(1024 * 15, totalPoints * 2048);

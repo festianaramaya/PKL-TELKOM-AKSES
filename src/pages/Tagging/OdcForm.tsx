@@ -13,8 +13,11 @@ export const OdcForm: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const existingMarkers = location.state?.existingMarkers || [];
-  const isTagging = location.state?.isTagging ?? true;
+  // Load data existingMarkers dari state atau dari sessionStorage sebagai penangan Back HP
+  const savedMarkers = sessionStorage.getItem('tagging_markers');
+  const existingMarkers =
+    location.state?.existingMarkers ||
+    (savedMarkers ? JSON.parse(savedMarkers) : []);
 
   const [formData, setFormData] = useState<OdcFormData>({
     label: '',
@@ -52,6 +55,11 @@ export const OdcForm: React.FC = () => {
 
           setIsLoadingLocation(false);
 
+          // Update data terbaru ke sessionStorage agar aman jika di-back
+          const updatedMarkers = [...existingMarkers, newMarker];
+          sessionStorage.setItem('tagging_markers', JSON.stringify(updatedMarkers));
+          sessionStorage.setItem('tagging_active', 'true');
+
           navigate('/tagging', {
             state: {
               newMarker,
@@ -73,9 +81,17 @@ export const OdcForm: React.FC = () => {
   };
 
   const handleBatal = () => {
-    navigate('/tagging', {
-      state: { existingMarkers, isTagging },
-    });
+    // Kembali ke halaman sebelumnya tanpa menghapus memori
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/tagging', {
+        state: {
+          existingMarkers,
+          isTagging: true,
+        },
+      });
+    }
   };
 
   return (
@@ -118,7 +134,6 @@ export const OdcForm: React.FC = () => {
                   <option value="ODC Horison">ODC Horison</option>
                   <option value="Mini OLT">Mini OLT</option>
                   <option value="Mini OLT + ODC">Mini OLT + ODC</option>
-
                 </select>
                 <span className="custom-arrow">▼</span>
               </div>
