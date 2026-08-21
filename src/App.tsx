@@ -10,6 +10,7 @@ import AdminRoute from "./components/AdminRoute";
 import UserManagement from "./pages/UserManagement"; 
 
 // === TAMBAHKAN IMPORT FILE FITUR BARU DI SINI ===
+import LinkBudget from "./pages/LinkBudget";
 import KmlToCsv from "./pages/KmlToCsv";
 import CreateLop from "./pages/CreateLop";
 import KmlToDxf from "./pages/KmlToDxf";
@@ -65,6 +66,7 @@ export default function App() {
 
         {/* --- RUTE UNTUK SEMUA USER YANG SUDAH LOGIN (User Biasa & Admin) --- */}
         <Route element={<ProtectedRoute />}>
+          <Route path="/link-budget" element={<LinkBudget />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/kml-to-dxf" element={<KmlToDxf />} />
           <Route path="/kml-to-csv" element={<KmlToCsv />} />

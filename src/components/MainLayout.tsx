@@ -44,7 +44,15 @@ export default function MainLayout({ children, pageTitle, activeMenu }: MainLayo
     
     // === TAMBAHAN MENU TAGGING ===
     { id: 'tagging', label: 'Tagging Map', href: '/tagging', icon: '/images/gps hitam.png' },
-  ];
+    
+    // === TAMBAHAN MENU LINK BUDGET ===
+    { 
+      id: 'link-budget', 
+      label: 'Link Budget', 
+      href: '/link-budget', 
+      icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z'/%3E%3Cpath d='M7 7h10v4H7zm0 6h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zm-8 4h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z'/%3E%3C/svg%3E" 
+    },
+  ]; // <-- Nah, kurung tutup array-nya yang benar ada di sini!
 
   if (userRole === 'admin') {
     menuList.push({
